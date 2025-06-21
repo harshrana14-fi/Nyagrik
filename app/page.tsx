@@ -79,21 +79,16 @@ const NyayWebsite = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Hero Section */}
-      <section id="home" className="relative h-[100vh] sm:h-[85vh] md:h-[95vh] flex items-center overflow-hidden">
-
+      <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
         {/* Background Carousel */}
         <div className="absolute inset-0 z-0">
           {heroSlides.map((slide, index) => (
             <div
               key={index}
-              className={`absolute inset-0 bg-cover bg-center sm:bg-top transition-opacity duration-1000 ease-in-out ${
+              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${
     currentImage === index ? 'opacity-100' : 'opacity-0'
-
               }`}
-              style={{ backgroundImage: `url(${slide.image})`,
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover', }}
+              style={{ backgroundImage: `url(${slide.image})` }}
             />
           ))}
         </div>

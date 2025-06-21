@@ -9,11 +9,12 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState('home');
 
   const navItems = [
-    { label: 'Home', href: '#home' },
-    { label: 'About', href: '#about' },
-    { label: 'Expertise', href: '#expertise' },
-    { label: 'Services', href: '#services' },
-    { label: 'Contact', href: '#contact' }
+    { label: 'Home', href: '/' },
+    { label: 'About us', href: '/about' },
+    { label: 'Expertise', href: '/#expertise' }, // Keep if you're still using section anchors on homepage
+    { label: 'Services', href: '/#services' },
+    { label: 'Our People', href: '/people' },
+    { label: 'Contact', href: '/#contact' },
   ];
 
   // Track scroll position for background
