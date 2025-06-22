@@ -37,7 +37,7 @@ export default function IntroLoader() {
       />
 
       {/* Title */}
-      <h1 className="text-5xl font-bold text-blue-800 mb-2">Nyay Portal</h1>
+      <h1 className="text-5xl font-bold text-blue-800 mb-2"> न्याय Portal</h1>
 
       {/* Subtitle */}
       <p className="text-lg text-gray-600 mb-6">Digital Bharat Ke Liye Digital Nyay</p>
