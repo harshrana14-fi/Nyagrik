@@ -13,9 +13,9 @@ const RegisterPage = () => {
     // Normally you'd post the data to your backend here
 
     // Redirect to role-specific dashboard
-    if (role === 'client') router.push('/dashboard/client');
-    else if (role === 'lawyer') router.push('/dashboard/lawyer');
-    else if (role === 'intern') router.push('/dashboard/intern');
+    if (role === 'client') router.push('/Dashboard/client');
+    else if (role === 'lawyer') router.push('/Dashboard/lawyer');
+    else if (role === 'intern') router.push('/Dashboard/intern');
   };
 
   return (

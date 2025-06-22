@@ -37,7 +37,7 @@ export default function IntroLoader() {
       />
 
       {/* Title */}
-      <h1 className="text-5xl font-bold text-blue-800 mb-2"> न्याय Portal</h1>
+      <h1 className="text-5xl font-bold text-blue-800 mb-2">Nyay Portal</h1>
 
       {/* Subtitle */}
       <p className="text-lg text-gray-600 mb-6">Digital Bharat Ke Liye Digital Nyay</p>
@@ -45,8 +45,8 @@ export default function IntroLoader() {
       {/* Spinner */}
       <div className="flex space-x-2">
         <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></span>
-        <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce [animation-delay:.2s]"></span>
-        <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce [animation-delay:.4s]"></span>
+        <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce delay-200"></span>
+        <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce delay-400"></span>
       </div>
     </div>
   )

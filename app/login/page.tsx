@@ -12,9 +12,9 @@ const LoginPage = () => {
 
     // Add real auth logic here
 
-    if (role === 'client') router.push('/dashboard/client');
-    else if (role === 'lawyer') router.push('/dashboard/lawyer');
-    else if (role === 'intern') router.push('/dashboard/intern');
+    if (role === 'client') router.push('/Dashboard/client');
+  else if (role === 'lawyer') router.push('/Dashboard/lawyer');
+    else if (role === 'intern') router.push('/Dashboard/intern');
   };
 
   return (
