@@ -60,7 +60,7 @@ const Navbar = () => {
             className="h-8 w-8 object-contain"
           />
           <Link href="#home" className="text-2xl font-bold text-indigo-700 tracking-wide">
-            NYAY
+            न्याय
           </Link>
         </div>
 
