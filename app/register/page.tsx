@@ -7,15 +7,36 @@ const RegisterPage = () => {
   const [role, setRole] = useState<'client' | 'lawyer' | 'intern' | null>(null);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
 
-    // Normally you'd post the data to your backend here
+    const data: any = {
+      role,
+      fullName: formData.get('fullName'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+    };
 
-    // Redirect to role-specific dashboard
-    if (role === 'client') router.push('/Dashboard/client');
-    else if (role === 'lawyer') router.push('/Dashboard/lawyer');
-    else if (role === 'intern') router.push('/Dashboard/intern');
+    if (role === 'lawyer') {
+      data.barReg = formData.get('barReg');
+      data.specialization = formData.get('specialization');
+    } else if (role === 'intern') {
+      data.university = formData.get('university');
+    }
+
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      router.push(`/Dashboard/${role}`);
+    } else {
+      alert('Registration failed.');
+    }
   };
 
   return (
@@ -72,18 +93,21 @@ const RegisterPage = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
+                name="fullName"
                 type="text"
                 placeholder="Full Name"
                 className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 required
               />
               <input
+                name="email"
                 type="email"
                 placeholder="Email"
                 className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 required
               />
               <input
+                name="password"
                 type="password"
                 placeholder="Password"
                 className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -94,12 +118,14 @@ const RegisterPage = () => {
               {role === 'lawyer' && (
                 <>
                   <input
+                    name="barReg"
                     type="text"
                     placeholder="Bar Registration Number"
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     required
                   />
                   <select
+                    name="specialization"
                     required
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700"
                   >
@@ -117,6 +143,7 @@ const RegisterPage = () => {
 
               {role === 'intern' && (
                 <input
+                  name="university"
                   type="text"
                   placeholder="Law School / University"
                   className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
