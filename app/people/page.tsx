@@ -8,7 +8,7 @@ const teamMembers = [
   {
     name: 'Suteekshn Manchanda',
     role: 'Founder',
-    image: '/team/suteekshn.jpg',
+    image: '/suteekshn.jpeg',
     description:
       'Suteekshn brings visionary leadership to Nyay. With deep insight into India’s legal system, he founded Nyay to simplify justice through technology and expand legal access across all regions.',
     linkedin: 'https://www.linkedin.com/in/suteekshn-manchanda-936b16330/',
@@ -18,7 +18,7 @@ const teamMembers = [
   {
     name: 'Shubham Solanki',
     role: 'Co-Founder',
-    image: '/team/shubham.jpg',
+    image: '/shubham.jpeg',
     description:
       'With a background in business and law, Shubham plays a key role in strategy and partnerships. He ensures Nyay aligns with real-world legal needs while remaining innovative and scalable.',
     linkedin: 'https://www.linkedin.com/in/shubham-solanki-902331321/',
@@ -28,7 +28,7 @@ const teamMembers = [
   {
     name: 'Harsh Rana',
     role: 'Chief Technical Officer (CTO)',
-    image: '/team/harsh.jpg',
+    image: '/.jpeg',
     description:
       'Harsh leads Nyay’s technology stack. He architects solutions that ensure performance, reliability, and user-centricity. His vision combines legal-tech innovation with top-tier engineering, turning complex legal processes into seamless digital experiences.',
     linkedin: 'https://www.linkedin.com/in/harsh-rana-17208634a/',
@@ -38,7 +38,7 @@ const teamMembers = [
   {
     name: 'Krish Vishwakarma',
     role: 'Chief Operating Officer (COO)',
-    image: '/team/krish.jpg',
+    image: '/krish.jpg',
     description:
       'Krish is the backbone of Nyay’s daily operations. He ensures smooth client-lawyer coordination, legal service workflows, and efficient implementation of new features.',
     linkedin: 'https://www.linkedin.com/in/krish-vishwakarma-46481527a/',
