@@ -36,8 +36,10 @@ export async function POST(request: Request) {
       JSON.stringify({ message: 'User created successfully', id: result.insertedId }),
       { status: 201 }
     );
-  } catch (error: any) {
-    console.error('[REGISTER API ERROR]', error.message);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+  } catch (error: unknown) {
+    // Safely access the error message
+    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
+    console.error('[REGISTER API ERROR]', errorMessage);
+    return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
   }
 }
