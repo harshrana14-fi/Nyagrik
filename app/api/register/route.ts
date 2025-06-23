@@ -38,8 +38,8 @@ export async function POST(request: Request) {
     );
   } catch (error: unknown) {
     // Safely access the error message
-    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
-    console.error('[REGISTER API ERROR]', errorMessage);
+    const errorMessage =     error instanceof Error ? error.message : 'An unexpected error occurred';
+  console.error('[REGISTER API ERROR]', errorMessage);
     return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
   }
 }
