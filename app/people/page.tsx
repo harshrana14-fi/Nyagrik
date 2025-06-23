@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaEnvelope } from 'react-icons/fa';
+import { FaLinkedin,} from 'react-icons/fa';
 
 const teamMembers = [
   {
@@ -12,8 +12,6 @@ const teamMembers = [
     description:
       'Suteekshn brings visionary leadership to Nyay. With deep insight into India’s legal system, he founded Nyay to simplify justice through technology and expand legal access across all regions.',
     linkedin: 'https://www.linkedin.com/in/suteekshn-manchanda-936b16330/',
-    github: 'https://github.com/suteekshn',
-    email: 'suteekshn@gmail.com',
   },
   {
     name: 'Shubham Solanki',
@@ -22,8 +20,6 @@ const teamMembers = [
     description:
       'With a background in business and law, Shubham plays a key role in strategy and partnerships. He ensures Nyay aligns with real-world legal needs while remaining innovative and scalable.',
     linkedin: 'https://www.linkedin.com/in/shubham-solanki-902331321/',
-    github: 'https://github.com/shubhamsolanki',
-    email: 'shubhamsolanki@gmail.com',
   },
   {
     name: 'Harsh Rana',
@@ -32,8 +28,6 @@ const teamMembers = [
     description:
       'Harsh leads Nyay’s technology stack. He architects solutions that ensure performance, reliability, and user-centricity. His vision combines legal-tech innovation with top-tier engineering, turning complex legal processes into seamless digital experiences.',
     linkedin: 'https://www.linkedin.com/in/harsh-rana-17208634a/',
-    github: 'https://github.com/harshjatoliya',
-    email: 'harshjatoliya@gmail.com',
   },
   {
     name: 'Krish Vishwakarma',
@@ -42,8 +36,6 @@ const teamMembers = [
     description:
       'Krish is the backbone of Nyay’s daily operations. He ensures smooth client-lawyer coordination, legal service workflows, and efficient implementation of new features.',
     linkedin: 'https://www.linkedin.com/in/krish-vishwakarma-46481527a/',
-    github: 'https://github.com/krishvishwakarma',
-    email: 'krishvishwakarma@gmail.com',
   },
 ];
 
@@ -102,12 +94,6 @@ const PeoplePage = () => {
                   <div className="mt-4 flex space-x-4">
                     <a href={member.linkedin} target="_blank" rel="noopener noreferrer" title="LinkedIn">
                       <FaLinkedin className="text-blue-700 hover:text-blue-900 w-5 h-5 transition" />
-                    </a>
-                    <a href={`mailto:${member.email}`} title="Gmail">
-                      <FaEnvelope className="text-red-600 hover:text-red-800 w-5 h-5 transition" />
-                    </a>
-                    <a href={member.github} target="_blank" rel="noopener noreferrer" title="GitHub">
-                      <FaGithub className="text-gray-700 hover:text-black w-5 h-5 transition" />
                     </a>
                   </div>
                 </div>
