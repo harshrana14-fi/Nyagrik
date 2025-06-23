@@ -14,7 +14,6 @@ const Navbar = () => {
     { label: 'Expertise', href: '/#expertise' }, // Keep if you're still using section anchors on homepage
     { label: 'Services', href: '/services' },
     { label: 'Our People', href: '/people' },
-    { label: 'Contact', href: '/#contact' },
   ];
 
   // Track scroll position for background
