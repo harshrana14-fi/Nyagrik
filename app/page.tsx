@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Scale, Users, Award, Shield, BookOpen, Phone, Mail, MapPin } from 'lucide-react';
+import { ChevronRight, Scale, Users, Award, Shield, BookOpen, } from 'lucide-react';
 import Link from 'next/link';
 
 const NyayWebsite = () => {
@@ -309,38 +309,6 @@ const NyayWebsite = () => {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section id="contact" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`transform transition-all duration-1000 ${isVisible.contact ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
-            <div className="text-center mb-16">
-              <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-6">Get In Touch</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Ready to discuss your legal needs? Contact us today for a consultation.
-              </p>
-            </div>
-            
-            <div className="grid lg:grid-cols-3 gap-8">
-              <div className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/40">
-                <Phone className="w-12 h-12 text-indigo-600 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-gray-800 mb-2">Call Us</h3>
-                <p className="text-gray-600">+91 98765 43210</p>
-              </div>
-              <div className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/40">
-                <Mail className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-gray-800 mb-2">Email Us</h3>
-                <p className="text-gray-600">contact@nyay.legal</p>
-              </div>
-              <div className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/40">
-                <MapPin className="w-12 h-12 text-green-600 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-gray-800 mb-2">Visit Us</h3>
-                <p className="text-gray-600">Legal District, New Delhi</p>
-              </div>
             </div>
           </div>
         </div>
