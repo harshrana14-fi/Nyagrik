@@ -51,7 +51,7 @@ const RegisterPage = () => {
     });
 
     if (res.ok) {
-      router.push(/Dashboard/${role});
+      router.push(`/Dashboard/${role}`);
     } else {
       alert('Registration failed.');
     }
