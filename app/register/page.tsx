@@ -1,18 +1,36 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaUserTie, FaUser, FaGraduationCap, FaArrowLeft, FaHome } from 'react-icons/fa';
+import {
+  FaUserTie,
+  FaUser,
+  FaGraduationCap,
+  FaArrowLeft,
+  FaHome,
+} from 'react-icons/fa';
+
+type Role = 'client' | 'lawyer' | 'intern';
+
+interface RegisterData {
+  fullName: FormDataEntryValue | null;
+  email: FormDataEntryValue | null;
+  password: FormDataEntryValue | null;
+  role: Role | null;
+  barReg?: FormDataEntryValue | null;
+  specialization?: FormDataEntryValue | null;
+  university?: FormDataEntryValue | null;
+}
 
 const RegisterPage = () => {
-  const [role, setRole] = useState<'client' | 'lawyer' | 'intern' | null>(null);
+  const [role, setRole] = useState<Role | null>(null);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.target as HTMLFormElement;
+    const form = e.currentTarget;
     const formData = new FormData(form);
 
-    const data: any = {
+    const data: RegisterData = {
       role,
       fullName: formData.get('fullName'),
       email: formData.get('email'),
@@ -33,7 +51,7 @@ const RegisterPage = () => {
     });
 
     if (res.ok) {
-      router.push(`/Dashboard/${role}`);
+      router.push(/Dashboard/${role});
     } else {
       alert('Registration failed.');
     }
@@ -57,7 +75,9 @@ const RegisterPage = () => {
         {/* Step 1: Role Selection */}
         {!role && (
           <>
-            <p className="text-gray-600 mb-6 text-sm">Please select your role to continue registration.</p>
+            <p className="text-gray-600 mb-6 text-sm">
+              Please select your role to continue registration.
+            </p>
             <div className="grid grid-cols-1 gap-4">
               <button
                 onClick={() => setRole('client')}
