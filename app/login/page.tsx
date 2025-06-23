@@ -5,22 +5,45 @@ import { FaUser, FaUserTie, FaGraduationCap, FaArrowLeft, FaHome } from 'react-i
 
 const LoginPage = () => {
   const [role, setRole] = useState<'client' | 'lawyer' | 'intern' | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Add real auth logic here
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (role === 'client') router.push('/Dashboard/client');
-  else if (role === 'lawyer') router.push('/Dashboard/lawyer');
-    else if (role === 'intern') router.push('/Dashboard/intern');
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || 'Login failed');
+        return;
+      }
+
+      // Redirect to dashboard based on role
+      if (data.role === 'client') router.push('/dashboard/client');
+      else if (data.role === 'lawyer') router.push('/dashboard/lawyer');
+      else if (data.role === 'intern') router.push('/dashboard/intern');
+      if (res.ok) {
+      router.push(`/Dashboard/${role}`);
+    } else {
+      alert('Login failed.');
+    }
+    } catch (error) {
+      alert('Something went wrong. Please try again.');
+      console.error(error);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 flex items-center justify-center px-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Nyay Login</h1>
           <button
@@ -32,29 +55,19 @@ const LoginPage = () => {
           </button>
         </div>
 
-        {/* Step 1: Role Selection */}
         {!role && (
           <>
             <p className="text-gray-600 mb-6 text-sm">Select your role to continue login.</p>
             <div className="grid grid-cols-1 gap-4">
-              <button
-                onClick={() => setRole('client')}
-                className="flex items-center justify-between px-5 py-3 rounded-lg border hover:shadow-md transition bg-gray-50 hover:bg-indigo-50 border-gray-300 text-gray-700"
-              >
+              <button onClick={() => setRole('client')} className="btn-role">
                 <span className="font-medium">Client</span>
                 <FaUser />
               </button>
-              <button
-                onClick={() => setRole('lawyer')}
-                className="flex items-center justify-between px-5 py-3 rounded-lg border hover:shadow-md transition bg-gray-50 hover:bg-indigo-50 border-gray-300 text-gray-700"
-              >
+              <button onClick={() => setRole('lawyer')} className="btn-role">
                 <span className="font-medium">Lawyer</span>
                 <FaUserTie />
               </button>
-              <button
-                onClick={() => setRole('intern')}
-                className="flex items-center justify-between px-5 py-3 rounded-lg border hover:shadow-md transition bg-gray-50 hover:bg-indigo-50 border-gray-300 text-gray-700"
-              >
+              <button onClick={() => setRole('intern')} className="btn-role">
                 <span className="font-medium">Law Student / Intern</span>
                 <FaGraduationCap />
               </button>
@@ -62,7 +75,6 @@ const LoginPage = () => {
           </>
         )}
 
-        {/* Step 2: Login Form */}
         {role && (
           <>
             <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center capitalize">
@@ -72,23 +84,20 @@ const LoginPage = () => {
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-field"
                 required
               />
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-field"
                 required
               />
-
-              <button
-                type="submit"
-                className="w-full py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
-              >
-                Login
-              </button>
-
+              <button type="submit" className="btn-submit">Login</button>
               <button
                 type="button"
                 onClick={() => setRole(null)}
@@ -101,6 +110,47 @@ const LoginPage = () => {
           </>
         )}
       </div>
+
+      {/* Tailwind utility classes you can extract or keep inline */}
+      <style jsx>{`
+        .btn-role {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.75rem 1.25rem;
+          background-color: #f9fafb;
+          border: 1px solid #d1d5db;
+          border-radius: 0.5rem;
+          color: #374151;
+          transition: background 0.2s ease;
+        }
+        .btn-role:hover {
+          background-color: #e0e7ff;
+        }
+        .input-field {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border: 1px solid #d1d5db;
+          border-radius: 0.5rem;
+          outline: none;
+        }
+        .input-field:focus {
+          border-color: #6366f1;
+          box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+        }
+        .btn-submit {
+          width: 100%;
+          padding: 0.75rem;
+          background-color: #4f46e5;
+          color: white;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          transition: background 0.2s ease;
+        }
+        .btn-submit:hover {
+          background-color: #4338ca;
+        }
+      `}</style>
     </div>
   );
 };

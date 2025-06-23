@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <Navbar />
+      <Navbar/>
         <main className="pt-16">{children}</main> {/* Offset for fixed navbar */}
         <Footer />
         <IntroLoader />
