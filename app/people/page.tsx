@@ -32,7 +32,7 @@ const teamMembers = [
   {
     name: 'Krish Vishwakarma',
     role: 'Chief Operating Officer (COO)',
-    image: '/krish.jpg',
+    image: '/krishvish.jpg',
     description:
       'Krish is the backbone of Nyay’s daily operations. He ensures smooth client-lawyer coordination, legal service workflows, and efficient implementation of new features.',
     linkedin: 'https://www.linkedin.com/in/krish-vishwakarma-46481527a/',
