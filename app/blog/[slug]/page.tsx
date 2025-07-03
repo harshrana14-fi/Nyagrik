@@ -3,14 +3,12 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Metadata } from "next";
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
-
-// ✅ SEO Metadata generation
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+// ✅ Correct inline typing — no external interface
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
   return {
@@ -19,7 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-// ✅ Dynamic route pre-rendering
+// ✅ generateStaticParams (for dynamic routing)
 export async function generateStaticParams() {
   const posts = await getAllPosts();
   return posts.map((post) => ({
@@ -27,8 +25,12 @@ export async function generateStaticParams() {
   }));
 }
 
-// ✅ Blog Post Page (no red underlines here)
-export default async function Page({ params }: PageProps) {
+// ✅ Final Page Component — fully working on Vercel
+export default async function Page({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const post = await getPostBySlug(params.slug);
   if (!post) return notFound();
 
