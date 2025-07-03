@@ -1,14 +1,18 @@
-import { getPostBySlug, getAllPosts } from "@/lib/markdown";
+// app/blog/[slug]/page.tsx
+
+import { getAllPosts, getPostBySlug } from "@/lib/markdown";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import { Metadata } from "next";
 
-interface PageProps {
+type BlogPageProps = {
   params: {
     slug: string;
   };
-}
+};
 
-export async function generateMetadata({ params }: PageProps) {
+// ✅ Generates metadata for SEO
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
 
@@ -18,15 +22,16 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
+// ✅ Generates static paths for all posts
 export async function generateStaticParams() {
-  const posts = await getAllPosts();
-
+  const posts = getAllPosts(); // Sync function
   return posts.map((post) => ({
-    params: { slug: post.slug }, // ✅ this is the fix
+    slug: post.slug,
   }));
 }
 
-export default async function BlogPostPage({ params }: PageProps) {
+// ✅ Renders the blog post page
+export default async function BlogPostPage({ params }: BlogPageProps) {
   const post = await getPostBySlug(params.slug);
   if (!post) return notFound();
 
