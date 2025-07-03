@@ -11,7 +11,7 @@ type BlogPageProps = {
   };
 };
 
-// ✅ Generates metadata for SEO
+// ✅ SEO Metadata
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
@@ -22,15 +22,15 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   };
 }
 
-// ✅ Generates static paths for all posts
+// ✅ Static Params (must return { slug } — not { params: { slug } })
 export async function generateStaticParams() {
-  const posts = getAllPosts(); // Sync function
+  const posts = getAllPosts(); // This is synchronous
   return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-// ✅ Renders the blog post page
+// ✅ Main Blog Post Page
 export default async function BlogPostPage({ params }: BlogPageProps) {
   const post = await getPostBySlug(params.slug);
   if (!post) return notFound();
