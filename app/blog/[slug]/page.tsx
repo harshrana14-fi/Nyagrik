@@ -1,8 +1,14 @@
-import { getPostBySlug } from "@/lib/markdown";
+import { getPostBySlug, getAllPosts } from "@/lib/markdown";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export async function generateMetadata({ params }: PageProps) {
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
 
@@ -12,7 +18,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export async function generateStaticParams() {
+  const posts = await getAllPosts(); // ✅ Must exist
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
+export default async function BlogPostPage({ params }: PageProps) {
   const post = await getPostBySlug(params.slug);
 
   if (!post) return notFound();
