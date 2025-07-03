@@ -5,7 +5,7 @@ excerpt: "Explore the contrasting rulings on copyright and fair use in generativ
 image: "/images/navigating-the-generative-ai-and-copyright-debate-key-court-rulings.png?fit=1200%2C800&ssl=1"
 ogImage: "https://nyay.legal/images/navigating-the-generative-ai-and-copyright-debate-key-court-rulings.png?fit=1200%2C800&ssl=1"
 readingTime: "10 min read"
-featured: true
+
 sections:
   - title: "Main"
     content: |

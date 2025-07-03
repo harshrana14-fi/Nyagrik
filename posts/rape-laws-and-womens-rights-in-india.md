@@ -7,7 +7,7 @@ tags: ["rape law", "women rights", "criminal law", "justice", "sexual violence"]
 image: "/images/wom.jpg"
 excerpt: "This guide sheds light on rape laws in India, the legal process, and the rights every woman deserves to know in the fight for justice."
 readingTime: "5 min read"
-featured: true
+
 ---
 
 # Rape Laws and Women's Rights in India  

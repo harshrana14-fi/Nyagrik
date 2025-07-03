@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getAllPosts } from "@/lib/markdown";
 
 export default async function BlogPage() {
-  const posts = getAllPosts();
+  const posts = await getAllPosts();
 
   return (
     <div className="bg-white min-h-screen py-12 px-4 sm:px-6 lg:px-8">

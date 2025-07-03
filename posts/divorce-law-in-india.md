@@ -7,7 +7,7 @@ tags: ["divorce", "family law", "women rights", "personal law", "marriage"]
 image: "/images/divbg.jpg"
 excerpt: "Divorce in India is more than a legal process — it's an emotional and social journey. Here's what you need to know about your rights, procedures, and support systems."
 readingTime: "4 min read"
-featured: true
+
 ---
 
 # Understanding Divorce Law in India  

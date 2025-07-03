@@ -1,4 +1,4 @@
-// lib/markdown.ts
+
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -7,7 +7,7 @@ import html from "remark-html";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 
-export function getAllPosts() {
+export async function getAllPosts() {
   const filenames = fs.readdirSync(postsDirectory);
 
   const posts = filenames.map((filename) => {
@@ -27,12 +27,11 @@ export function getAllPosts() {
     };
   });
 
-  // 🟨 Force 3 key blogs to appear first
   const featuredSlugs = [
-    "rape-laws-and-womens-rights-in-india",
-    "divorce-law-in-india",
     "constitutional-law-in-india",
     "criminal-law-in-india",
+    "rape-laws-and-womens-rights-in-india",
+    "divorce-law-in-india",
   ];
 
   const featuredPosts = posts.filter((post) => featuredSlugs.includes(post.slug));

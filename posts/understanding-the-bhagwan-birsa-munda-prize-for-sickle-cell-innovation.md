@@ -5,7 +5,7 @@ excerpt: "Discover the Ministry of Tribal Affairs' initiative offering crores in
 image: "/images/understanding-the-bhagwan-birsa-munda-prize-for-sickle-cell-innovation.png?fit=1024%2C1024&ssl=1"
 ogImage: "https://nyay.legal/images/understanding-the-bhagwan-birsa-munda-prize-for-sickle-cell-innovation.png?fit=1024%2C1024&ssl=1"
 readingTime: "7 min read"
-featured: true
+
 sections:
   - title: "Main"
     content: |

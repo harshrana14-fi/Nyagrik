@@ -5,7 +5,7 @@ excerpt: "In the previous post, we had discussed the new OO 537/2025 that is all
 image: "/images/part-ii-new-performance-metrics-might-be-in-place-in-the-ipo.png?fit=475%2C476&ssl=1"
 ogImage: "https://nyay.legal/images/part-ii-new-performance-metrics-might-be-in-place-in-the-ipo.png?fit=475%2C476&ssl=1"
 readingTime: "5 min read"
-featured: true
+
 sections:
   - title: "Main"
     content: |

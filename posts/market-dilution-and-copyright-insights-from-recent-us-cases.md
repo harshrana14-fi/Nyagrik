@@ -5,7 +5,7 @@ excerpt: "Explore the divergent rulings of Judges Alsup and Chhabria on AI, copy
 image: "/images/market-dilution-and-copyright-insights-from-recent-us-cases.png?fit=615%2C409&ssl=1"
 ogImage: "https://nyay.legal/images/market-dilution-and-copyright-insights-from-recent-us-cases.png?fit=615%2C409&ssl=1"
 readingTime: "7 min read"
-featured: true
+
 sections:
   - title: "Main"
     content: |

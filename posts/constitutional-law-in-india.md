@@ -7,7 +7,7 @@ tags: ["constitutional law", "fundamental rights", "india"]
 image: "/images/demobg.jpg"
 excerpt: "Explore the depth and beauty of Indian Constitutional Law — the soul of democracy, justice, and your rights."
 readingTime: "4 min read"
-featured: true
+
 ---
 
 # The Heart of Indian Democracy: A Journey Through Constitutional Law

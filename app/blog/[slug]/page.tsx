@@ -3,14 +3,14 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Metadata } from "next";
 
-type BlogPageProps = {
+type Props = {
   params: {
     slug: string;
   };
 };
 
-// ✅ SEO Metadata
-export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+// ✅ SEO metadata
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
 
@@ -20,18 +20,16 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   };
 }
 
-// ✅ Static Params — FIXED: return { params: { slug } }
+// ✅ Static paths for dynamic route
 export async function generateStaticParams() {
-  const posts = getAllPosts();
+  const posts = await getAllPosts(); // Now async
   return posts.map((post) => ({
-    params: {
-      slug: post.slug,
-    },
+    slug: post.slug,
   }));
 }
 
-// ✅ Blog Page Component
-export default async function BlogPostPage({ params }: BlogPageProps) {
+// ✅ Blog post page
+export default async function Page({ params }: Props) {
   const post = await getPostBySlug(params.slug);
   if (!post) return notFound();
 

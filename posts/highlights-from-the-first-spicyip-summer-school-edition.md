@@ -5,7 +5,7 @@ excerpt: "Explore the key takeaways from the inaugural SpicyIP Summer School, hi
 image: "/images/highlights-from-the-first-spicyip-summer-school-edition.png?fit=1080%2C1080&ssl=1"
 ogImage: "https://nyay.legal/images/highlights-from-the-first-spicyip-summer-school-edition.png?fit=1080%2C1080&ssl=1"
 readingTime: "4 min read"
-featured: true
+
 sections:
   - title: "Main"
     content: |

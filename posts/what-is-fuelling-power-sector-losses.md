@@ -5,7 +5,7 @@ excerpt: "FIND YOUR MP"
 image: "/images/default.jpg"
 ogImage: "https://nyay.legal/images/default.jpg"
 readingTime: "1 min read"
-featured: true
+
 sections:
   - title: "What is Fuelling Power Sector Losses?"
     content: |

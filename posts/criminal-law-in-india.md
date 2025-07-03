@@ -7,7 +7,7 @@ tags: ["criminal law", "ipc", "law in india", "justice", "crime", "legal system"
 image: "/images/crime.jpg"
 excerpt: "Explore the core principles of criminal law in India, including how crimes are defined, investigated, and prosecuted under the Indian Penal Code (IPC)."
 readingTime: "5 min read"
-featured: false
+
 ---
 
 # Understanding Criminal Law in India  
