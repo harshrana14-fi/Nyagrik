@@ -1,3 +1,5 @@
+// app/blog/page.tsx
+
 import Link from "next/link";
 import Image from "next/image";
 import { getAllPosts } from "@/lib/markdown";

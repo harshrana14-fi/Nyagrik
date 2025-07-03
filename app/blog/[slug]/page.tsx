@@ -3,33 +3,32 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Metadata } from "next";
 
-type Props = {
+interface PageProps {
   params: {
     slug: string;
   };
-};
+}
 
-// ✅ SEO metadata
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+// ✅ SEO Metadata generation
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
-
   return {
     title: `${post.title} | Nyagrik Blog`,
     description: post.excerpt || post.title,
   };
 }
 
-// ✅ Static paths for dynamic route
+// ✅ Dynamic route pre-rendering
 export async function generateStaticParams() {
-  const posts = await getAllPosts(); // Now async
+  const posts = await getAllPosts();
   return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-// ✅ Blog post page
-export default async function Page({ params }: Props) {
+// ✅ Blog Post Page (no red underlines here)
+export default async function Page({ params }: PageProps) {
   const post = await getPostBySlug(params.slug);
   if (!post) return notFound();
 
