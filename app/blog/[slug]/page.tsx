@@ -19,9 +19,10 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts(); // This must return slugs
+  const posts = await getAllPosts();
+
   return posts.map((post) => ({
-    slug: post.slug,
+    params: { slug: post.slug }, // ✅ this is the fix
   }));
 }
 
