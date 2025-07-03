@@ -1,5 +1,3 @@
-// app/blog/[slug]/page.tsx
-
 import { getAllPosts, getPostBySlug } from "@/lib/markdown";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -22,15 +20,17 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   };
 }
 
-// ✅ Static Params (must return { slug } — not { params: { slug } })
+// ✅ Static Params — FIXED: return { params: { slug } }
 export async function generateStaticParams() {
-  const posts = getAllPosts(); // This is synchronous
+  const posts = getAllPosts();
   return posts.map((post) => ({
-    slug: post.slug,
+    params: {
+      slug: post.slug,
+    },
   }));
 }
 
-// ✅ Main Blog Post Page
+// ✅ Blog Page Component
 export default async function BlogPostPage({ params }: BlogPageProps) {
   const post = await getPostBySlug(params.slug);
   if (!post) return notFound();
