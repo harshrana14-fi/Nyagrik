@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts(); // ✅ Must exist
+  const posts = await getAllPosts(); // This must return slugs
   return posts.map((post) => ({
     slug: post.slug,
   }));
@@ -27,7 +27,6 @@ export async function generateStaticParams() {
 
 export default async function BlogPostPage({ params }: PageProps) {
   const post = await getPostBySlug(params.slug);
-
   if (!post) return notFound();
 
   return (
@@ -36,7 +35,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="mb-6">
           <h1 className="text-4xl font-bold text-gray-900">{post.title}</h1>
           <p className="text-sm text-gray-500 mt-2">
-            {post.date} · {post.readingTime || "3 min read"} · By <span className="font-medium">Nyagrik Team</span>
+            {post.date} · {post.readingTime || "3 min read"} · By{" "}
+            <span className="font-medium">Nyagrik Team</span>
           </p>
         </div>
 
