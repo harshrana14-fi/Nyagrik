@@ -30,7 +30,11 @@
     "react-dom": "^19.0.0",
     "react-i18next": "^15.5.3",
     "react-icons": "^5.5.0",
+    "rehype": "^13.0.2",
+    "rehype-prism-plus": "^2.0.1",
+    "rehype-stringify": "^10.0.1",
     "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
     "slugify": "^1.6.6"
   },
