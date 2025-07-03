@@ -13,6 +13,7 @@ const Navbar = () => {
     { label: 'About us', href: '/about' },
     { label: 'Expertise', href: '/#expertise' }, // Keep if you're still using section anchors on homepage
     { label: 'Services', href: '/services' },
+    { label: 'Blog', href: '/blog' },
     { label: 'Our People', href: '/people' },
   ];
 

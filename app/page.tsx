@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronRight, Scale, Users, Award, Shield, BookOpen, } from 'lucide-react';
 import Link from 'next/link';
 
+
 const NyayWebsite = () => {
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
   const [, setActiveSection] = useState('home');
@@ -310,47 +311,6 @@ const NyayWebsite = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-       {/* Testimonials */}
-      <section className="py-20 bg-gradient-to-br from-indigo-50 to-purple-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-6">What Our Clients Say</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Hear from those who have trusted NYAY with their legal needs.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Amit Sharma",
-                feedback: "NYAY provided exceptional legal support during a difficult time. Their professionalism and dedication are unmatched.",
-                image: "/client1.jpg"
-              },
-              {
-                name: "Priya Verma",
-                feedback: "The team at NYAY made the legal process simple and stress-free. Highly recommended!",
-                image: "/client2.jpg"
-              },
-              {
-                name: "Rahul Singh",
-                feedback: "Expert advice and prompt responses. I felt confident and well-represented throughout my case.",
-                image: "/client3.jpg"
-              }
-            ].map((testimonial, idx) => (
-              <div key={idx} className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/40 flex flex-col items-center text-center">
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  className="w-20 h-20 rounded-full object-cover mb-4 border-4 border-indigo-200"
-                />
-                <p className="text-gray-700 italic mb-4">&quot;{testimonial.feedback}&quot;</p>
-                <span className="font-semibold text-indigo-700">{testimonial.name}</span>
-              </div>
-            ))}
           </div>
         </div>
       </section>

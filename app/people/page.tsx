@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FaLinkedin,} from 'react-icons/fa';
+import { FaLinkedin, } from 'react-icons/fa';
 
 const teamMembers = [
   {
@@ -28,6 +28,7 @@ const teamMembers = [
     description:
       'Harsh leads Nyay’s technology stack. He architects solutions that ensure performance, reliability, and user-centricity. His vision combines legal-tech innovation with top-tier engineering, turning complex legal processes into seamless digital experiences.',
     linkedin: 'https://www.linkedin.com/in/harsh-rana-17208634a/',
+  
   },
   {
     name: 'Krish Vishwakarma',
