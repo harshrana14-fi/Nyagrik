@@ -1,6 +1,8 @@
+"use client";
 import Link from 'next/link'
 import Image from 'next/image'
-import { FaLinkedin, FaTwitter, FaGithub } from 'react-icons/fa'
+import { FaLinkedin, FaTwitter, FaInstagram} from 'react-icons/fa'
+
 
 export default function Footer() {
   return (
@@ -16,14 +18,14 @@ export default function Footer() {
             Nyay is an AI-powered legal-tech platform bridging clients, lawyers, and interns to deliver smart, accessible, and efficient justice.
           </p>
           <div className="flex space-x-4 mt-4">
-            <Link href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
+            <Link href="https://www.linkedin.com/company/nyagrik/" target="_blank" aria-label="LinkedIn">
               <FaLinkedin className="text-xl hover:text-white transition" />
             </Link>
             <Link href="https://twitter.com" target="_blank" aria-label="Twitter">
               <FaTwitter className="text-xl hover:text-white transition" />
             </Link>
-            <Link href="https://github.com" target="_blank" aria-label="GitHub">
-              <FaGithub className="text-xl hover:text-white transition" />
+            <Link href="https://www.instagram.com/" target="_blank" aria-label="Instagram">
+              <FaInstagram className="text-xl hover:text-white transition" />
             </Link>
           </div>
         </div>
@@ -34,10 +36,10 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-3">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/" className="hover:text-white">Home</Link></li>
-              <li><Link href="/#about" className="hover:text-white">About</Link></li>
-              <li><Link href="/Eexpertise" className="hover:text-white">Expertise</Link></li>
-              <li><Link href="/#services" className="hover:text-white">Services</Link></li>
-              <li><Link href="/#contact" className="hover:text-white">Contact</Link></li>
+              <li><Link href="/about" className="hover:text-white">About</Link></li>
+              <li><Link href="/#expertise" className="hover:text-white">Expertise</Link></li>
+              <li><Link href="/services" className="hover:text-white">Services</Link></li>
+              <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
               <li><Link href="/login" className="hover:text-white">Login</Link></li>
               <li><Link href="/register" className="hover:text-white">Register</Link></li>
             </ul>
@@ -67,27 +69,6 @@ export default function Footer() {
               Subscribe
             </button>
           </form>
-
-          <div className="mt-6">
-            <label htmlFor="lang" className="block text-sm mb-2 text-white font-medium">
-              Language
-            </label>
-            <select
-              id="lang"
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 text-sm text-white rounded"
-            >
-              <option>English</option>
-              <option>हिंदी</option>
-              <option>বাংলা</option>
-              <option>தமிழ்</option>
-              <option>తెలుగు</option>
-              <option>मराठी</option>
-              <option>ગુજરાતી</option>
-              <option>ಕನ್ನಡ</option>
-              <option>മലയാളം</option>
-              <option>ਪੰਜਾਬੀ</option>
-            </select>
-          </div>
         </div>
       </div>
 
