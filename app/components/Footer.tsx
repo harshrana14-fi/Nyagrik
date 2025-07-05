@@ -11,7 +11,7 @@ export default function Footer() {
         {/* Left: Logo and About */}
         <div>
           <div className="flex items-center mb-4">
-            <Image src="/nyaylogo.jpg" alt="Nyay Logo" width={40} height={40} />
+            <Image src="/nyaylogo.png" alt="Nyay Logo" width={40} height={40} />
             <span className="text-xl font-semibold text-white ml-3">Nyay</span>
           </div>
           <p className="text-sm text-gray-400 mb-4 leading-relaxed">
