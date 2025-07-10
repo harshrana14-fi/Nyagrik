@@ -65,18 +65,22 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-8">
+       <div className="hidden md:flex items-center space-x-8">
           {navItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className={`font-medium transition-colors duration-200 ${
+              className={`relative font-medium text-lg transition-colors duration-200 group ${
                 activeSection === item.href.substring(1)
-                  ? 'text-indigo-600'
-                  : 'text-gray-700 hover:text-indigo-500'
+                  ? "text-indigo-600"
+                  : "text-gray-700 hover:text-indigo-500"
               }`}
             >
               {item.label}
+              <span
+                className="absolute left-0 -bottom-1 w-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full group-hover:w-full transition-all duration-300 ease-out"
+                style={{ content: '""', display: "block" }}
+              />
             </a>
           ))}
         </div>
