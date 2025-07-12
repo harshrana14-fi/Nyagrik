@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import Image from "next/image";
 
 const Navbar = () => {
   const [navOpen, setNavOpen] = useState(false);
