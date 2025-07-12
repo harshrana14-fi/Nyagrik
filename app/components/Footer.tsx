@@ -11,7 +11,11 @@ export default function Footer() {
         {/* Left: Logo and About */}
         <div>
           <div className="flex items-center mb-4">
+<<<<<<< HEAD
             <Image src="/nyagriklogo.png" alt="Nyay Logo" width={40} height={40} />
+=======
+            <Image src="/nyagriklogo.png" alt="Nyay Logo" width={50} height={50} />
+>>>>>>> 7b4f9cd (updated logo)
             <span className="text-xl font-semibold text-white ml-3">Nyay</span>
           </div>
           <p className="text-sm text-gray-400 mb-4 leading-relaxed">

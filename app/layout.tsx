@@ -5,7 +5,6 @@ import IntroLoader from './components/IntroLoader';
 import HelpBot from '@/app/components/HelpBot'; 
 import type { Metadata } from 'next';
 
-
 export const metadata: Metadata = {
   title: 'Nyagrik',
   description: 'A modern legal tech platform',
