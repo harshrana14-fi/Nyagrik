@@ -28,7 +28,7 @@ export default function IntroLoader() {
     >
       {/* Logo */}
       <Image
-        src="/nyaylogo.png"
+        src="/nyagriklogo.png"
         alt="Nyay Logo"
         width={100}
         height={100}
