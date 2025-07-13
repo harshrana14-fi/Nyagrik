@@ -3,7 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { markdownToHtml } from '@/lib/markdown';
+import { markdownToHtml } from '../../../lib/markdown';
 
 interface BlogPost {
   slug: string;

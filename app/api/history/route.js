@@ -1,7 +1,7 @@
 // ✅ /app/api/history/route.js (fetches history by userId stored as string)
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
-import clientPromise from '@/lib/mongodb';
+import clientPromise from '../../../lib/mongodb';
 
 export async function GET(req) {
   try {
