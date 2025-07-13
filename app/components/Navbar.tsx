@@ -1,15 +1,9 @@
-<<<<<<< HEAD
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
-=======
-"use client";
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
->>>>>>> 7b4f9cd (updated logo)
-import Image from "next/image";
 
 type User = {
   name: string;
@@ -21,47 +15,24 @@ type User = {
 const Navbar = () => {
   const [navOpen, setNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-<<<<<<< HEAD
   const [activeSection, setActiveSection] = useState('home');
   const [user, setUser] = useState<User | null>(null);
 
   const navItems = [
     { label: 'Home', href: '/' },
     { label: 'About us', href: '/about' },
-    { label: 'Expertise', href: '/expertise' },
+    { label: 'Expertise', href: '/#expertise' },
     { label: 'Services', href: '/services' },
     { label: 'Our People', href: '/people' },
+    { label: 'Blog', href: '/blog' },
   ];
 
-  // Track scroll
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Scrollspy
-=======
-  const [activeSection, setActiveSection] = useState("home");
-
-  const navItems = [
-    { label: "Home", href: "/" },
-    { label: "About us", href: "/about" },
-    { label: "Expertise", href: "/#expertise" },
-    { label: "Services", href: "/services" },
-    { label: "Blog", href: "/blog" },
-    { label: "Our People", href: "/people" },
-  ];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
->>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -73,17 +44,11 @@ const Navbar = () => {
       },
       { threshold: 0.5 }
     );
-<<<<<<< HEAD
     const sections = document.querySelectorAll('section[id]');
-=======
-
-    const sections = document.querySelectorAll("section[id]");
->>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
   }, []);
 
-  // Auth check
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -110,65 +75,37 @@ const Navbar = () => {
   };
 
   return (
-<<<<<<< HEAD
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 shadow-lg backdrop-blur-md' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <img src="/Nyagriklogo.jpg" alt="Nyagrik Logo" className="h-8 w-8 object-contain" />
-          <Link href="/" className="text-2xl font-bold text-indigo-700 tracking-wide">
-            Nyagrik
-=======
-    <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/90 shadow-lg backdrop-blur-md" : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        {/* Logo */}
-        <div className="flex items-center space-x-2">
-<<<<<<< HEAD
-          <img
-=======
           <Image
->>>>>>> 7b4f9cd (updated logo)
             src="/nyagriklogo.png"
-            alt="Nyay Logo"
+            alt="Nyagrik Logo"
             width={50}
             height={50}
+            className="object-contain"
           />
-          <Link
-            href="#home"
-            className="text-2xl font-bold text-indigo-700 tracking-wide"
-          >
+          <Link href="/" className="text-2xl font-bold text-indigo-700 tracking-wide">
             न्याय
->>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
           </Link>
         </div>
 
         {/* Desktop Nav */}
-       <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center space-x-8">
           {navItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
-<<<<<<< HEAD
-              className={`font-medium transition-colors duration-200 ${activeSection === item.href.substring(1)
-                  ? 'text-indigo-600'
-                  : 'text-gray-700 hover:text-indigo-500'
-                }`}
-=======
               className={`relative font-medium text-lg transition-colors duration-200 group ${
                 activeSection === item.href.substring(1)
-                  ? "text-indigo-600"
-                  : "text-gray-700 hover:text-indigo-500"
+                  ? 'text-indigo-600'
+                  : 'text-gray-700 hover:text-indigo-500'
               }`}
->>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
             >
               {item.label}
               <span
                 className="absolute left-0 -bottom-1 w-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full group-hover:w-full transition-all duration-300 ease-out"
-                style={{ content: '""', display: "block" }}
               />
             </a>
           ))}
@@ -188,16 +125,10 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link
-                href="/login"
-                className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition"
-              >
+              <Link href="/login" className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition">
                 Login
               </Link>
-              <Link
-                href="/register"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold hover:bg-indigo-700 transition"
-              >
+              <Link href="/register" className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold hover:bg-indigo-700 transition">
                 Register
               </Link>
             </>
@@ -206,10 +137,7 @@ const Navbar = () => {
 
         {/* Mobile Toggle */}
         <div className="md:hidden">
-          <button
-            onClick={() => setNavOpen(!navOpen)}
-            className="text-gray-800 focus:outline-none"
-          >
+          <button onClick={() => setNavOpen(!navOpen)} className="text-gray-800 focus:outline-none">
             {navOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
@@ -223,18 +151,11 @@ const Navbar = () => {
               key={item.href}
               href={item.href}
               onClick={() => setNavOpen(false)}
-<<<<<<< HEAD
-              className={`block font-medium transition-colors duration-200 ${activeSection === item.href.substring(1)
-                  ? 'text-indigo-600'
-                  : 'text-gray-700 hover:text-indigo-500'
-                }`}
-=======
               className={`block font-medium transition-colors duration-200 ${
                 activeSection === item.href.substring(1)
-                  ? "text-indigo-600"
-                  : "text-gray-700 hover:text-indigo-500"
+                  ? 'text-indigo-600'
+                  : 'text-gray-700 hover:text-indigo-500'
               }`}
->>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
             >
               {item.label}
             </a>
@@ -254,18 +175,10 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link
-                href="/login"
-                onClick={() => setNavOpen(false)}
-                className="block text-indigo-600 hover:text-indigo-800 font-semibold"
-              >
+              <Link href="/login" onClick={() => setNavOpen(false)} className="block text-indigo-600 hover:text-indigo-800 font-semibold">
                 Login
               </Link>
-              <Link
-                href="/register"
-                onClick={() => setNavOpen(false)}
-                className="block bg-indigo-600 text-white text-center py-2 rounded-md font-semibold hover:bg-indigo-700"
-              >
+              <Link href="/register" onClick={() => setNavOpen(false)} className="block bg-indigo-600 text-white text-center py-2 rounded-md font-semibold hover:bg-indigo-700">
                 Register
               </Link>
             </>
