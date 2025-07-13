@@ -62,7 +62,7 @@ const RegisterPage = () => {
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Nyay Registration</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Nyagrik Registration</h1>
           <button
             onClick={() => router.push('/')}
             className="text-sm text-gray-500 hover:text-indigo-600 flex items-center space-x-1"

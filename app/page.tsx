@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronRight, Scale, Users, Award, Shield, BookOpen, } from 'lucide-react';
 import Link from 'next/link';
 
-const NyayWebsite = () => {
+const NyagrikWebsite = () => {
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
   const [, setActiveSection] = useState('home');
   const [currentImage, setCurrentImage] = useState(0);
@@ -11,8 +11,8 @@ const NyayWebsite = () => {
   const heroSlides = [
     {
       image: "/legalbg1.jpg",
-      title: "NYAY",
-      subtitle: "Digital Bharat ke Liye Digital Nyay",
+      title: "Nyagrik",
+      subtitle: "Digital nagrik ke liye Digital Nyay",
       description:
         "Your trusted legal partner delivering comprehensive solutions with integrity, expertise, and unwavering commitment to justice in every case we handle.",
     },
@@ -129,9 +129,9 @@ const NyayWebsite = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`transform transition-all duration-1000 ${isVisible.about ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
             <div className="text-center mb-16">
-              <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-6">About NYAY</h2>
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-6">About Nyagrik</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Founded on principles of justice and excellence, NYAY represents the pinnacle of legal expertise combined with modern innovation.
+                Founded on principles of justice and excellence, Nyagrik represents the pinnacle of legal expertise combined with modern innovation.
               </p>
             </div>
             
@@ -141,7 +141,7 @@ const NyayWebsite = () => {
                   <Scale className="w-12 h-12 text-indigo-600 mb-4" />
                   <h3 className="text-2xl font-bold text-gray-800 mb-4">Our Foundation</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Built on decades of legal excellence, NYAY has established itself as a premier legal institution. We combine traditional legal wisdom with innovative approaches to deliver unparalleled legal services.
+                    Built on decades of legal excellence, Nyagrik has established itself as a premier legal institution. We combine traditional legal wisdom with innovative approaches to deliver unparalleled legal services.
                   </p>
                 </div>
                 <div className="bg-white/60 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/30">
@@ -155,7 +155,7 @@ const NyayWebsite = () => {
               
               <div className="relative">
                 <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-8 rounded-3xl shadow-2xl text-white">
-                  <h3 className="text-3xl font-bold mb-6">Why Choose NYAY?</h3>
+                  <h3 className="text-3xl font-bold mb-6">Why Choose Nyagrik?</h3>
                   <ul className="space-y-4">
                     <li className="flex items-center space-x-3">
                       <Award className="w-6 h-6 text-yellow-300" />
@@ -256,11 +256,11 @@ const NyayWebsite = () => {
         </div>
       </section>
 
-      {/* NYAY Edge */}
+      {/* Nyagrik Edge */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-6">The NYAY Edge</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-6">The Nyagrik Edge</h2>
           </div>
           
           <div className="grid lg:grid-cols-3 gap-8">
@@ -320,19 +320,19 @@ const NyayWebsite = () => {
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-6">What Our Clients Say</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Hear from those who have trusted NYAY with their legal needs.
+              Hear from those who have trusted Nyagrik with their legal needs.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 name: "Amit Sharma",
-                feedback: "NYAY provided exceptional legal support during a difficult time. Their professionalism and dedication are unmatched.",
+                feedback: "Nyagrik provided exceptional legal support during a difficult time. Their professionalism and dedication are unmatched.",
                 image: "/client1.jpg"
               },
               {
                 name: "Priya Verma",
-                feedback: "The team at NYAY made the legal process simple and stress-free. Highly recommended!",
+                feedback: "The team at Nyagrik made the legal process simple and stress-free. Highly recommended!",
                 image: "/client2.jpg"
               },
               {
@@ -358,4 +358,4 @@ const NyayWebsite = () => {
   );
 };
 
-export default NyayWebsite;
+export default NyagrikWebsite;

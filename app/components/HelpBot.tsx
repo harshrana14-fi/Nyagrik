@@ -25,8 +25,8 @@ const HelpBot = () => {
     if (lower.includes('register')) return 'To register, choose your role (client, lawyer, or intern) and fill the required form. Let me know if something’s unclear!';
     if (lower.includes('consultation')) return 'You can request a legal consultation from the homepage or visit the “Get Legal Consultation” section directly.';
     if (lower.includes('upload')) return 'Make sure the file is PDF, DOCX, or supported format. Still not working? Try refreshing or compressing the file.';
-    if (lower.includes('what is nyay')) return 'Nyay is an AI-powered platform to connect clients with lawyers for smarter, faster justice delivery.';
-    if (lower.includes('contact')) return 'You can contact us via the Contact section in the navigation bar or email support@nyay.ai.';
+    if (lower.includes('what is Nyagrik')) return 'Nyagrik is an AI-powered platform to connect clients with lawyers for smarter, faster justice delivery.';
+    if (lower.includes('contact')) return 'You can contact us via the Contact section in the navigation bar or email support@Nyagrik.ai.';
 
     return 'I’m still learning! Try asking about login, register, upload issues, or consultations.';
   };
@@ -68,7 +68,7 @@ const HelpBot = () => {
             <input
               type="text"
               className="w-full px-3 py-2 text-sm focus:outline-none"
-              placeholder="Ask NyayBot..."
+              placeholder="Ask NyagrikBot..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}

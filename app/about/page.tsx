@@ -10,7 +10,7 @@ const AboutPage = () => {
       <section className="relative h-[60vh] w-full">
         <Image
           src="/aboutus.jpg" // ✅ Add a professional image to /public/images/
-          alt="Nyay Team"
+          alt="Nyagrik Team"
           fill
           className="object-cover brightness-75"
         />
@@ -22,7 +22,7 @@ const AboutPage = () => {
             transition={{ duration: 0.8 }}
             className="text-white max-w-3xl"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">About Nyay</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">About Nyagrik</h1>
             <p className="text-lg md:text-xl">Bridging the Gap Between Law and Technology</p>
           </motion.div>
         </div>
@@ -100,9 +100,9 @@ const AboutPage = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Join Us at Nyay</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Join Us at Nyagrik</h2>
             <p className="text-gray-600 mb-6">
-              Whether you&apos;re a client, lawyer, or law student — there&apos;s a place for you at Nyay. Let’s build a better legal world together.
+              Whether you&apos;re a client, lawyer, or law student — there&apos;s a place for you at Nyagrik. Let’s build a better legal world together.
             </p>
             <a
               href="/contact"

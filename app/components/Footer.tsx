@@ -9,11 +9,11 @@ export default function Footer() {
         {/* Left: Logo and About */}
         <div>
           <div className="flex items-center mb-4">
-            <Image src="/nyaylogo.jpg" alt="Nyay Logo" width={40} height={40} />
-            <span className="text-xl font-semibold text-white ml-3">Nyay</span>
+            <Image src="/Nyagriklogo.jpg" alt="Nyagrik Logo" width={40} height={40} />
+            <span className="text-xl font-semibold text-white ml-3">Nyagrik</span>
           </div>
           <p className="text-sm text-gray-400 mb-4 leading-relaxed">
-            Nyay is an AI-powered legal-tech platform bridging clients, lawyers, and interns to deliver smart, accessible, and efficient justice.
+            Nyagrik is an AI-powered legal-tech platform bridging clients, lawyers, and interns to deliver smart, accessible, and efficient justice.
           </p>
           <div className="flex space-x-4 mt-4">
             <Link href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
@@ -92,7 +92,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-gray-700 mt-12 pt-6 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} Nyay. All rights reserved.
+        © {new Date().getFullYear()} Nyagrik. All rights reserved.
       </div>
     </footer>
   )

@@ -10,42 +10,43 @@ const LoginPage = () => {
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); // ⛔ prevents page refresh
 
     try {
       const res = await fetch('/api/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || 'Login failed');
-        return;
+        throw new Error(data.error || 'Login failed');
       }
 
-      // Redirect to dashboard based on role
-      if (data.role === 'client') router.push('/dashboard/client');
-      else if (data.role === 'lawyer') router.push('/dashboard/lawyer');
-      else if (data.role === 'intern') router.push('/dashboard/intern');
-      if (res.ok) {
-      router.push(`/Dashboard/${role}`);
-    } else {
-      alert('Login failed.');
-    }
-    } catch (error) {
-      alert('Something went wrong. Please try again.');
-      console.error(error);
+      console.log('Login success:', data);
+      alert('Login successful');
+      // redirect based on role
+      if (data.role === 'client') router.push('/Dashboard/client');
+      else if (data.role === 'lawyer') router.push('/Dashboard/lawyer');
+      else router.push('/Dashboard/intern');
+    } catch (error: unknown) {
+      const err = error as Error;
+      console.error('Login error:', err.message);
+      alert('Login failed: ' + err.message);
     }
   };
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 flex items-center justify-center px-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Nyay Login</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Nyagrik Login</h1>
           <button
             onClick={() => router.push('/')}
             className="text-sm text-gray-500 hover:text-indigo-600 flex items-center space-x-1"

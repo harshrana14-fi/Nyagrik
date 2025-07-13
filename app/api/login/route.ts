@@ -3,18 +3,19 @@ import clientPromise from '@/lib/mongodb';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
-
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
+    if (!email || !password) {
+      return NextResponse.json({ error: 'Email and password required' }, { status: 400 });
+    }
+
     const client = await clientPromise;
-    const db = client.db('nyay'); // use your DB name
-    const usersCollection = db.collection('users');
+    const db = client.db('Nyagrik');
+    const users = db.collection('users');
 
-    const user = await usersCollection.findOne({ email });
-
+    const user = await users.findOne({ email });
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
@@ -24,6 +25,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
     }
 
+    const JWT_SECRET = process.env.JWT_SECRET!;
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       JWT_SECRET,
@@ -44,8 +46,8 @@ export async function POST(req: Request) {
     });
 
     return response;
-  } catch (err) {
-    console.error('[LOGIN API ERROR]', err);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  } catch (error: any) {
+    console.error('[LOGIN API ERROR]', error.message || error);
+    return NextResponse.json({ error: error.message || 'Server error' }, { status: 500 });
   }
 }

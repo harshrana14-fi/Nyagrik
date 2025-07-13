@@ -10,7 +10,7 @@ const teamMembers = [
     role: 'Founder',
     image: '/suteekshn.jpeg',
     description:
-      'Suteekshn brings visionary leadership to Nyay. With deep insight into India’s legal system, he founded Nyay to simplify justice through technology and expand legal access across all regions.',
+      'Suteekshn brings visionary leadership to Nyagrik. With deep insight into India’s legal system, he founded Nyagrik to simplify justice through technology and expand legal access across all regions.',
     linkedin: 'https://www.linkedin.com/in/suteekshn-manchanda-936b16330/',
   },
   {
@@ -18,7 +18,7 @@ const teamMembers = [
     role: 'Co-Founder',
     image: '/shubham.jpeg',
     description:
-      'With a background in business and law, Shubham plays a key role in strategy and partnerships. He ensures Nyay aligns with real-world legal needs while remaining innovative and scalable.',
+      'With a background in business and law, Shubham plays a key role in strategy and partnerships. He ensures Nyagrik aligns with real-world legal needs while remaining innovative and scalable.',
     linkedin: 'https://www.linkedin.com/in/shubham-solanki-902331321/',
   },
   {
@@ -26,7 +26,7 @@ const teamMembers = [
     role: 'Chief Technical Officer (CTO)',
     image: '/.jpeg',
     description:
-      'Harsh leads Nyay’s technology stack. He architects solutions that ensure performance, reliability, and user-centricity. His vision combines legal-tech innovation with top-tier engineering, turning complex legal processes into seamless digital experiences.',
+      'Harsh leads Nyagrik’s technology stack. He architects solutions that ensure performance, reliability, and user-centricity. His vision combines legal-tech innovation with top-tier engineering, turning complex legal processes into seamless digital experiences.',
     linkedin: 'https://www.linkedin.com/in/harsh-rana-17208634a/',
   },
   {
@@ -34,7 +34,7 @@ const teamMembers = [
     role: 'Chief Operating Officer (COO)',
     image: '/krish.jpg',
     description:
-      'Krish is the backbone of Nyay’s daily operations. He ensures smooth client-lawyer coordination, legal service workflows, and efficient implementation of new features.',
+      'Krish is the backbone of Nyagrik’s daily operations. He ensures smooth client-lawyer coordination, legal service workflows, and efficient implementation of new features.',
     linkedin: 'https://www.linkedin.com/in/krish-vishwakarma-46481527a/',
   },
 ];
@@ -46,7 +46,7 @@ const PeoplePage = () => {
       <section className="relative h-[50vh] w-full">
         <Image
           src="/team.webp"
-          alt="Nyay Team"
+          alt="Nyagrik Team"
           fill
           className="object-cover brightness-75"
         />
@@ -60,7 +60,7 @@ const PeoplePage = () => {
           >
             Our People
           </motion.h1>
-          <p className="mt-2 text-lg">Meet the team behind Nyay’s mission of accessible justice.</p>
+          <p className="mt-2 text-lg">Meet the team behind Nyagrik’s mission of accessible justice.</p>
         </div>
       </section>
 

@@ -28,8 +28,8 @@ export default function IntroLoader() {
     >
       {/* Logo */}
       <Image
-        src="/nyaylogo.jpg"
-        alt="Nyay Logo"
+        src="/Nyagriklogo.jpg"
+        alt="Nyagrik Logo"
         width={100}
         height={100}
         className="mb-6"
@@ -37,10 +37,10 @@ export default function IntroLoader() {
       />
 
       {/* Title */}
-      <h1 className="text-5xl font-bold text-blue-800 mb-2">Nyay Portal</h1>
+      <h1 className="text-5xl font-bold text-blue-800 mb-2">Nyagrik Portal</h1>
 
       {/* Subtitle */}
-      <p className="text-lg text-gray-600 mb-6">Digital Bharat Ke Liye Digital Nyay</p>
+      <p className="text-lg text-gray-600 mb-6">Digital Nagrik ke liye Nyagrik</p>
 
       {/* Spinner */}
       <div className="flex space-x-2">

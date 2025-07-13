@@ -8,7 +8,7 @@ import HelpBot from '@/app/components/HelpBot'; // ✅ Import HelpBot
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Nyay Legal Firm',
+  title: 'Nyagrik Legal Firm',
   description: 'A modern legal tech platform',
 };
 
@@ -17,10 +17,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
       <Navbar/>
-        <main className="pt-16">{children}</main> {/* Offset for fixed navbar */}
+        <main className="pt-16">{children}</main>
         <Footer />
         <IntroLoader />
-        <HelpBot /> {/* ✅ HelpBot is now floating across all pages */}
+        <HelpBot />
       </body>
     </html>
   );

@@ -18,7 +18,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="min-h-screen flex">
       {/* Sidebar */}
       <div className="w-64 bg-white border-r p-6 space-y-4 shadow-md">
-        <h2 className="text-xl font-bold text-indigo-700 mb-4">Nyay Portal ⚖️</h2>
+        <h2 className="text-xl font-bold text-indigo-700 mb-4">Nyagrik Portal ⚖️</h2>
         <nav className="space-y-2">
           {navItems.map((item) => (
             <Link

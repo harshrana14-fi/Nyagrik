@@ -1,45 +1,53 @@
+import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
-    const { fullName, email, password, role } = body;
+    const { fullName, email, password, role } = await req.json();
 
-    // 1. Validate required fields
     if (!fullName || !email || !password || !role) {
-      return new Response(JSON.stringify({ error: 'All fields are required' }), { status: 400 });
+      return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
     const client = await clientPromise;
-    const db = client.db('nyay');
-    const collection = db.collection('users');
+    const db = client.db('Nyagrik');
+    const users = db.collection('users');
 
-    // 2. Check if user already exists
-    const existingUser = await collection.findOne({ email });
+    const existingUser = await users.findOne({ email });
     if (existingUser) {
-      return new Response(JSON.stringify({ error: 'User already exists' }), { status: 400 });
+      return NextResponse.json({ error: 'User already exists' }, { status: 400 });
     }
 
-    // 3. Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 4. Insert the user with hashed password
-    const result = await collection.insertOne({
+    const result = await users.insertOne({
       fullName,
       email,
       password: hashedPassword,
       role,
     });
 
-    return new Response(
-      JSON.stringify({ message: 'User created successfully', id: result.insertedId }),
-      { status: 201 }
+    const JWT_SECRET = process.env.JWT_SECRET!;
+    const token = jwt.sign(
+      { userId: result.insertedId, role },
+      JWT_SECRET,
+      { expiresIn: '7d' }
     );
-  } catch (error: unknown) {
-    // Safely access the error message
-    const errorMessage =     error instanceof Error ? error.message : 'An unexpected error occurred';
-  console.error('[REGISTER API ERROR]', errorMessage);
-    return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
+
+    const response = NextResponse.json({ message: 'User registered', id: result.insertedId });
+    response.cookies.set('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
+      path: '/',
+    });
+
+    return response;
+  } catch (error: any) {
+    console.error('[REGISTER API ERROR]', error.message || error);
+    return NextResponse.json({ error: error.message || 'Server error' }, { status: 500 });
   }
 }
