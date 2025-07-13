@@ -1,5 +1,5 @@
 {
-  "name": "Nyagrik-legalfirm",
+  "name": "nyagrik-platform",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -26,11 +26,6 @@
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.0",
     "next": "15.3.4",
-<<<<<<< HEAD
-    "pdf-parse": "^1.1.1",
-=======
-    "next-i18next": "^15.4.2",
->>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-i18next": "^15.5.3",
@@ -49,12 +44,6 @@
     "@types/i18next": "^12.1.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
-<<<<<<< HEAD
-    "@types/pdf-parse": "^1.1.5",
-    "@types/react": "^19",
-=======
-    "@types/react": "^19.1.8",
->>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
     "@types/react-dom": "^19",
     "@types/react-i18next": "^7.8.3",
     "autoprefixer": "^10.4.21",
