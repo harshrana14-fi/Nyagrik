@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FaLinkedin,} from 'react-icons/fa';
+import { FaLinkedin, } from 'react-icons/fa';
 
 const teamMembers = [
   {
@@ -28,11 +28,12 @@ const teamMembers = [
     description:
       'Harsh leads Nyagrik’s technology stack. He architects solutions that ensure performance, reliability, and user-centricity. His vision combines legal-tech innovation with top-tier engineering, turning complex legal processes into seamless digital experiences.',
     linkedin: 'https://www.linkedin.com/in/harsh-rana-17208634a/',
+  
   },
   {
     name: 'Krish Vishwakarma',
     role: 'Chief Operating Officer (COO)',
-    image: '/krish.jpg',
+    image: '/krishvish.jpg',
     description:
       'Krish is the backbone of Nyagrik’s daily operations. He ensures smooth client-lawyer coordination, legal service workflows, and efficient implementation of new features.',
     linkedin: 'https://www.linkedin.com/in/krish-vishwakarma-46481527a/',

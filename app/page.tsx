@@ -3,7 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { ChevronRight, Scale, Users, Award, Shield, BookOpen, } from 'lucide-react';
 import Link from 'next/link';
 
+<<<<<<< HEAD
 const NyagrikWebsite = () => {
+=======
+
+const NyayWebsite = () => {
+>>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
   const [, setActiveSection] = useState('home');
   const [currentImage, setCurrentImage] = useState(0);
@@ -313,6 +318,7 @@ const NyagrikWebsite = () => {
           </div>
         </div>
       </section>
+<<<<<<< HEAD
 
        {/* Testimonials */}
       <section className="py-20 bg-gradient-to-br from-indigo-50 to-purple-100">
@@ -354,6 +360,8 @@ const NyagrikWebsite = () => {
           </div>
         </div>
       </section>
+=======
+>>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
     </div>
   );
 };

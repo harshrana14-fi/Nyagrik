@@ -28,8 +28,13 @@ export default function IntroLoader() {
     >
       {/* Logo */}
       <Image
+<<<<<<< HEAD
         src="/Nyagriklogo.jpg"
         alt="Nyagrik Logo"
+=======
+        src="/nyagriklogo.png"
+        alt="Nyay Logo"
+>>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
         width={100}
         height={100}
         className="mb-6"

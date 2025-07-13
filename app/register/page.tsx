@@ -11,19 +11,19 @@ import {
 
 type Role = 'client' | 'lawyer' | 'intern';
 
-interface RegisterData {
-  fullName: FormDataEntryValue | null;
-  email: FormDataEntryValue | null;
-  password: FormDataEntryValue | null;
-  role: Role | null;
-  barReg?: FormDataEntryValue | null;
-  specialization?: FormDataEntryValue | null;
-  university?: FormDataEntryValue | null;
-}
-
 const RegisterPage = () => {
   const [role, setRole] = useState<Role | null>(null);
   const router = useRouter();
+
+  type RegisterData = {
+    role: Role | null;
+    fullName: string;
+    email: string;
+    password: string;
+    barReg?: string;
+    specialization?: string;
+    university?: string;
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,35 +32,42 @@ const RegisterPage = () => {
 
     const data: RegisterData = {
       role,
-      fullName: formData.get('fullName'),
-      email: formData.get('email'),
-      password: formData.get('password'),
+      fullName: String(formData.get('fullName') || ''),
+      email: String(formData.get('email') || ''),
+      password: String(formData.get('password') || ''),
     };
 
-    if (role === 'lawyer') {
-      data.barReg = formData.get('barReg');
-      data.specialization = formData.get('specialization');
+     if (role === 'lawyer') {
+      data.barReg = String(formData.get('barReg') || '');
+      data.specialization = String(formData.get('specialization') || '');
     } else if (role === 'intern') {
-      data.university = formData.get('university');
+      data.university = String(formData.get('university') || '');
     }
 
-    const res = await fetch('/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
 
-    if (res.ok) {
-      router.push(`/Dashboard/${role}`);
-    } else {
-      alert('Registration failed.');
+      const result = await res.json();
+
+      if (res.ok) {
+        router.push(`/Dashboard/${role}`);
+      } else {
+        console.error('Registration failed:', result.error);
+        alert(`Registration failed: ${result.error || 'Please try again'}`);
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      alert('Something went wrong. Please try again.');
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 flex items-center justify-center px-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Nyagrik Registration</h1>
           <button
@@ -72,7 +79,6 @@ const RegisterPage = () => {
           </button>
         </div>
 
-        {/* Step 1: Role Selection */}
         {!role && (
           <>
             <p className="text-gray-600 mb-6 text-sm">
@@ -104,7 +110,6 @@ const RegisterPage = () => {
           </>
         )}
 
-        {/* Step 2: Form */}
         {role && (
           <>
             <h2 className="text-xl font-semibold text-gray-800 mb-4 mt-2 capitalize text-center">
@@ -134,7 +139,6 @@ const RegisterPage = () => {
                 required
               />
 
-              {/* Role-specific Fields */}
               {role === 'lawyer' && (
                 <>
                   <input
@@ -156,6 +160,9 @@ const RegisterPage = () => {
                     <option value="family">Family Law</option>
                     <option value="ip">Intellectual Property</option>
                     <option value="tax">Tax Law</option>
+                    <option value="environmental">Environmental Law</option>
+                    <option value="labor">Labor Law</option>
+                    <option value="real-estate">Real Estate Law</option>
                     <option value="other">Other</option>
                   </select>
                 </>
@@ -171,7 +178,6 @@ const RegisterPage = () => {
                 />
               )}
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 className="w-full py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
@@ -179,7 +185,6 @@ const RegisterPage = () => {
                 Complete Registration
               </button>
 
-              {/* Back to Role Selection */}
               <button
                 type="button"
                 onClick={() => setRole(null)}
