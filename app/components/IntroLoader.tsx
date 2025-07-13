@@ -1,23 +1,23 @@
-'use client'
-import { useEffect, useState } from 'react'
-import Image from 'next/image'
-import clsx from 'clsx'
+'use client';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import clsx from 'clsx';
 
 export default function IntroLoader() {
-  const [show, setShow] = useState(true)
-  const [fade, setFade] = useState(false)
+  const [show, setShow] = useState(true);
+  const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    const fadeTimer = setTimeout(() => setFade(true), 1800) // start fading out
-    const timer = setTimeout(() => setShow(false), 2500) // remove after fade
+    const fadeTimer = setTimeout(() => setFade(true), 1800); // start fading out
+    const timer = setTimeout(() => setShow(false), 2500); // remove after fade
 
     return () => {
-      clearTimeout(fadeTimer)
-      clearTimeout(timer)
-    }
-  }, [])
+      clearTimeout(fadeTimer);
+      clearTimeout(timer);
+    };
+  }, []);
 
-  if (!show) return null
+  if (!show) return null;
 
   return (
     <div
@@ -28,13 +28,8 @@ export default function IntroLoader() {
     >
       {/* Logo */}
       <Image
-<<<<<<< HEAD
-        src="/Nyagriklogo.jpg"
+        src="/nyagriklogo.png" // ✅ unified logo path
         alt="Nyagrik Logo"
-=======
-        src="/nyagriklogo.png"
-        alt="Nyay Logo"
->>>>>>> 0f802d0e38b8c488819d54c8f95ed221e988d32f
         width={100}
         height={100}
         className="mb-6"
@@ -54,5 +49,5 @@ export default function IntroLoader() {
         <span className="w-2 h-2 bg-blue-600 rounded-full animate-bounce delay-400"></span>
       </div>
     </div>
-  )
+  );
 }
