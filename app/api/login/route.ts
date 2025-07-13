@@ -46,8 +46,9 @@ export async function POST(req: Request) {
     });
 
     return response;
-  } catch (error: any) {
-    console.error('[LOGIN API ERROR]', error.message || error);
-    return NextResponse.json({ error: error.message || 'Server error' }, { status: 500 });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unexpected error';
+    console.error('[LOGIN API ERROR]', errorMessage);
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

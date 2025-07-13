@@ -6,6 +6,7 @@ import HelpBot from '@/app/components/HelpBot';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  title: 'Nyagrik',
   description: 'A modern legal tech platform',
 };
 
@@ -15,6 +16,10 @@ export default function RootLayout({ children}: { children: React.ReactNode}) {
     <html lang='en'>
       <body>
       <Navbar/>
+        <main className="pt-16">{children}</main> 
+        <Footer />
+        <IntroLoader />
+        <HelpBot /> 
       </body>
     </html>
   );

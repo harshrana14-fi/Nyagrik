@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 import jwt from 'jsonwebtoken';
-import { ObjectId } from 'mongodb';
+
+interface JwtPayload {
+  userId: string;
+  role: string;
+}
 
 export async function GET(req: NextRequest) {
   try {
@@ -10,7 +14,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+
     const client = await clientPromise;
     const db = client.db();
 
@@ -20,8 +25,9 @@ export async function GET(req: NextRequest) {
       .toArray();
 
     return NextResponse.json(reports);
-  } catch (error) {
-    console.error('[FETCH REPORTS ERROR]', error);
-    return NextResponse.json({ error: 'Server Error' }, { status: 500 });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unexpected error';
+    console.error('[FETCH REPORTS ERROR]', errorMessage);
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

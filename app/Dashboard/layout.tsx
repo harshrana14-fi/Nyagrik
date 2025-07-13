@@ -1,4 +1,4 @@
-// Dashboard/layout.tsx
+// app/Dashboard/layout.tsx
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import { redirect } from 'next/navigation';
@@ -6,20 +6,20 @@ import { redirect } from 'next/navigation';
 const JWT_SECRET = process.env.JWT_SECRET!;
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
+  
+   const cookieStore = await cookies();
 
-    if (!token) {
-        redirect('/login');
-    }
+  const token = cookieStore.get('token')?.value;
 
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET) as { role: string; userId: string };
+  if (!token) {
+    redirect('/login');
+  }
 
-
-        return <>{children}</>;
-    } catch (err) {
-        console.error('[JWT ERROR]', err);
-        redirect('/login');
-    }
+  try {
+    jwt.verify(token, JWT_SECRET); // You may destructure here if needed
+    return <>{children}</>;
+  } catch (err) {
+    console.error('[JWT ERROR]', err);
+    redirect('/login');
+  }
 }

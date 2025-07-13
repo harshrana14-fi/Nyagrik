@@ -1,4 +1,3 @@
-// app/dashboard/lawyer/layout.tsx (same for /intern/layout.tsx)
 'use client';
 
 import Link from 'next/link';

@@ -9,10 +9,7 @@ if (!uri) {
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-// Caching for hot reload in development
 declare global {
-  // Allow global caching for MongoClient
-  // eslint-disable-next-line no-var
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 

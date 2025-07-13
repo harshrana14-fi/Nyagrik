@@ -19,12 +19,14 @@ type User = {
   email?: string;
 };
 
+type TabId = 'profile' | 'upload' | 'history' | 'connect';
+
 export default function ClientDashboardPage() {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState('');
   const [aiResult, setAiResult] = useState('');
-  const [activeTab, setActiveTab] = useState<'profile' | 'upload' | 'history' | 'connect'>('profile');
+  const [activeTab, setActiveTab] = useState<TabId>('profile');
   const [user, setUser] = useState<User | null>(null);
   const [caseHistory, setCaseHistory] = useState<CaseItem[]>([]);
 
@@ -48,7 +50,7 @@ export default function ClientDashboardPage() {
     };
 
     checkAuthAndFetchUser();
-  }, []);
+  }, [router]); // ✅ router added to dependency array
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) setFile(e.target.files[0]);
@@ -67,7 +69,7 @@ export default function ClientDashboardPage() {
 
     if (!data.success) return alert('AI analysis failed');
 
-    const newCase = {
+    const newCase: CaseItem = {
       fileName: file.name,
       description,
       analysis: data.analysis,
@@ -80,7 +82,7 @@ export default function ClientDashboardPage() {
     setDescription('');
   };
 
-  const tabs = [
+  const tabs: { id: TabId; label: string }[] = [
     { id: 'profile', label: 'Profile' },
     { id: 'upload', label: 'AI Case Upload' },
     { id: 'history', label: 'Report History' },
@@ -104,11 +106,12 @@ export default function ClientDashboardPage() {
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
-            className={`px-4 py-2 rounded-md font-medium ${activeTab === tab.id
-              ? 'bg-indigo-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300'
-              }`}
+            onClick={() => setActiveTab(tab.id)} // ✅ No `as any` needed
+            className={`px-4 py-2 rounded-md font-medium ${
+              activeTab === tab.id
+                ? 'bg-indigo-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300'
+            }`}
           >
             {tab.label}
           </button>

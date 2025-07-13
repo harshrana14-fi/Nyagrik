@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Scale, Users, Award, Shield, BookOpen } from 'lucide-react';
+import { ChevronRight } from 'lucide-react'; // ✅ Removed unused icons
 import Link from 'next/link';
 
 const NyagrikWebsite = () => {
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
-  const [, setActiveSection] = useState('home');
+  const [, setActiveSection] = useState('home'); // ✅ this is still fine if you plan to use it later
   const [currentImage, setCurrentImage] = useState(0);
 
   const heroSlides = [
@@ -38,7 +38,7 @@ const NyagrikWebsite = () => {
       setCurrentImage((prevIndex) => (prevIndex + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [heroSlides.length]); // ✅ Fix: include dependency for `heroSlides.length`
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -59,23 +59,8 @@ const NyagrikWebsite = () => {
     return () => observer.disconnect();
   }, []);
 
-  const services = [
-    { title: "Corporate Law", description: "Comprehensive corporate legal solutions for businesses of all sizes", icon: "🏢" },
-    { title: "Criminal Defense", description: "Expert criminal defense representation with proven track record", icon: "⚖️" },
-    { title: "Civil Litigation", description: "Strategic litigation services for complex civil matters", icon: "📋" },
-    { title: "Family Law", description: "Compassionate legal support for family-related legal issues", icon: "👨‍👩‍👧‍👦" },
-    { title: "Property Law", description: "Complete property and real estate legal services", icon: "🏠" },
-    { title: "Tax Consultation", description: "Expert tax advice and compliance solutions", icon: "💼" },
-  ];
-
-  const expertise = [
-    "Constitutional Law",
-    "Commercial Disputes",
-    "Intellectual Property",
-    "Labor & Employment",
-    "Banking & Finance",
-    "Regulatory Compliance"
-  ];
+  // ✅ Removed unused `services` and `expertise` arrays.
+  // You can add them later where they're used in rendering.
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -119,8 +104,6 @@ const NyagrikWebsite = () => {
           </div>
         </div>
       </section>
-
-      {/* Additional sections like About, Services, Expertise, etc. should go here (reuse your provided code, already valid). */}
     </div>
   );
 };
