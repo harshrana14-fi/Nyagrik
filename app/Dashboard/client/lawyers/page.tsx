@@ -48,7 +48,7 @@ const mockLawyers: Lawyer[] = [
     casesHandled: 234,
     availability: 'Available',
     phone: '+91-9876543210',
-    email: 'lawyer1r@nyagrik.com',
+    email: 'lawyer1@gmail.com',
     priceRange: 'Mid-range'
   },
   {
