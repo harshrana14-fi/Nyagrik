@@ -1,15 +1,15 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { 
-  Scale, 
-  FileText, 
-  Users, 
-  Calendar, 
-  MessageSquare, 
-  TrendingUp, 
-  Clock, 
+"use client";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Scale,
+  FileText,
+  Users,
+  Calendar,
+  MessageSquare,
+  TrendingUp,
+  Clock,
   CheckCircle,
   AlertCircle,
   User,
@@ -17,9 +17,9 @@ import {
   Phone,
   Eye,
   Download,
-  Filter
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+  Filter,
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 type CaseItem = {
   id: string;
@@ -27,9 +27,9 @@ type CaseItem = {
   description: string;
   aiSolution: string;
   date: string;
-  status: 'pending' | 'in-progress' | 'completed' | 'urgent';
+  status: "pending" | "in-progress" | "completed" | "urgent";
   clientName: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
   caseType: string;
   estimatedHours?: number;
 };
@@ -42,81 +42,129 @@ type User = {
   specialization?: string;
   experience?: string;
   barNumber?: string;
+  profileImage?: string;
 };
 
-type TabId = 'profile' | 'cases' | 'clients' | 'analytics' | 'calendar' | 'messages';
+type TabId =
+  | "profile"
+  | "cases"
+  | "clients"
+  | "analytics"
+  | "calendar"
+  | "messages";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Input = ({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value?: string;
+  onChange: any;
+}) => (
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      {label}
+    </label>
+    <input
+      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      value={value || ""}
+      onChange={onChange}
+      required
+    />
+  </div>
+);
 
 const LawyerDashboard = () => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<TabId>('profile');
+  const [activeTab, setActiveTab] = useState<TabId>("profile");
   const [user, setUser] = useState<User | null>(null);
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [editUser, setEditUser] = useState<User>({
+    role: "lawyer",
+    name: "",
+    email: "",
+    phone: "",
+    specialization: "",
+    experience: "",
+    barNumber: "",
+  });
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [filterStatus, setFilterStatus] = useState<string>("all");
   const [acceptedCases] = useState<CaseItem[]>([
     {
-      id: '001',
-      fileName: 'property_dispute.pdf',
-      description: 'Client facing property dispute with neighbor regarding boundary issues',
-      aiSolution: 'Applicable: Transfer of Property Act, 1882. Suggest mediation or civil suit under specific performance.',
-      date: '2025-06-21',
-      status: 'in-progress',
-      clientName: 'Rajesh Kumar',
-      priority: 'high',
-      caseType: 'Property Law',
-      estimatedHours: 25
+      id: "001",
+      fileName: "property_dispute.pdf",
+      description:
+        "Client facing property dispute with neighbor regarding boundary issues",
+      aiSolution:
+        "Applicable: Transfer of Property Act, 1882. Suggest mediation or civil suit under specific performance.",
+      date: "2025-06-21",
+      status: "in-progress",
+      clientName: "Rajesh Kumar",
+      priority: "high",
+      caseType: "Property Law",
+      estimatedHours: 25,
     },
     {
-      id: '002',
-      fileName: 'contract_breach.pdf',
-      description: 'Business contract breach case - supplier failed to deliver goods as per agreement',
-      aiSolution: 'Indian Contract Act, 1872 - Section 73. Claim damages for breach of contract.',
-      date: '2025-06-18',
-      status: 'pending',
-      clientName: 'Priya Sharma',
-      priority: 'medium',
-      caseType: 'Contract Law',
-      estimatedHours: 15
+      id: "002",
+      fileName: "contract_breach.pdf",
+      description:
+        "Business contract breach case - supplier failed to deliver goods as per agreement",
+      aiSolution:
+        "Indian Contract Act, 1872 - Section 73. Claim damages for breach of contract.",
+      date: "2025-06-18",
+      status: "pending",
+      clientName: "Priya Sharma",
+      priority: "medium",
+      caseType: "Contract Law",
+      estimatedHours: 15,
     },
     {
-      id: '003',
-      fileName: 'employment_issue.pdf',
-      description: 'Wrongful termination case - employee dismissed without proper notice',
-      aiSolution: 'Industrial Disputes Act, 1947. File complaint with labour court for reinstatement.',
-      date: '2025-06-15',
-      status: 'urgent',
-      clientName: 'Amit Verma',
-      priority: 'high',
-      caseType: 'Employment Law',
-      estimatedHours: 20
+      id: "003",
+      fileName: "employment_issue.pdf",
+      description:
+        "Wrongful termination case - employee dismissed without proper notice",
+      aiSolution:
+        "Industrial Disputes Act, 1947. File complaint with labour court for reinstatement.",
+      date: "2025-06-15",
+      status: "urgent",
+      clientName: "Amit Verma",
+      priority: "high",
+      caseType: "Employment Law",
+      estimatedHours: 20,
     },
     {
-      id: '004',
-      fileName: 'divorce_proceedings.pdf',
-      description: 'Mutual consent divorce case with asset division and custody arrangements',
-      aiSolution: 'Hindu Marriage Act, 1955. Prepare mutual consent petition with settlement terms.',
-      date: '2025-06-10',
-      status: 'completed',
-      clientName: 'Sunita Devi',
-      priority: 'low',
-      caseType: 'Family Law',
-      estimatedHours: 30
-    }
+      id: "004",
+      fileName: "divorce_proceedings.pdf",
+      description:
+        "Mutual consent divorce case with asset division and custody arrangements",
+      aiSolution:
+        "Hindu Marriage Act, 1955. Prepare mutual consent petition with settlement terms.",
+      date: "2025-06-10",
+      status: "completed",
+      clientName: "Sunita Devi",
+      priority: "low",
+      caseType: "Family Law",
+      estimatedHours: 30,
+    },
   ]);
 
   useEffect(() => {
     const checkAuthAndFetchUser = async () => {
       try {
-        const res = await fetch('/api/me', { credentials: 'include' });
+        const res = await fetch("/api/me", { credentials: "include" });
         const data = await res.json();
-        
+
         if (res.ok) {
           setUser(data);
         } else {
-          console.error('Error fetching user info:', data.error);
-          router.push('/login');
+          console.error("Error fetching user info:", data.error);
+          router.push("/login");
         }
       } catch (err) {
-        console.error('Failed to fetch user info:', err);
-        router.push('/login');
+        console.error("Failed to fetch user info:", err);
+        router.push("/login");
       }
     };
 
@@ -125,42 +173,106 @@ const LawyerDashboard = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'in-progress': return 'bg-blue-100 text-blue-800';
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'urgent': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "in-progress":
+        return "bg-blue-100 text-blue-800";
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "urgent":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-600';
-      case 'medium': return 'text-yellow-600';
-      case 'low': return 'text-green-600';
-      default: return 'text-gray-600';
+      case "high":
+        return "text-red-600";
+      case "medium":
+        return "text-yellow-600";
+      case "low":
+        return "text-green-600";
+      default:
+        return "text-gray-600";
     }
   };
 
-  const filteredCases = acceptedCases.filter(caseItem => 
-    filterStatus === 'all' || caseItem.status === filterStatus
+  const filteredCases = acceptedCases.filter(
+    (caseItem) => filterStatus === "all" || caseItem.status === filterStatus
   );
 
   const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
-    { id: 'profile', label: 'Profile', icon: <User size={18} /> },
-    { id: 'cases', label: 'Case Management', icon: <Scale size={18} /> },
-    { id: 'clients', label: 'Client Directory', icon: <Users size={18} /> },
-    { id: 'analytics', label: 'Analytics', icon: <TrendingUp size={18} /> },
-    { id: 'calendar', label: 'Calendar', icon: <Calendar size={18} /> },
-    { id: 'messages', label: 'Messages', icon: <MessageSquare size={18} /> },
+    { id: "profile", label: "Profile", icon: <User size={18} /> },
+    { id: "cases", label: "Case Management", icon: <Scale size={18} /> },
+    { id: "clients", label: "Client Directory", icon: <Users size={18} /> },
+    { id: "analytics", label: "Analytics", icon: <TrendingUp size={18} /> },
+    { id: "calendar", label: "Calendar", icon: <Calendar size={18} /> },
+    { id: "messages", label: "Messages", icon: <MessageSquare size={18} /> },
   ];
 
   const stats = [
-    { label: 'Active Cases', value: acceptedCases.filter(c => c.status === 'in-progress').length, icon: <Scale size={20} />, color: 'bg-blue-500' },
-    { label: 'Pending Review', value: acceptedCases.filter(c => c.status === 'pending').length, icon: <Clock size={20} />, color: 'bg-yellow-500' },
-    { label: 'Completed', value: acceptedCases.filter(c => c.status === 'completed').length, icon: <CheckCircle size={20} />, color: 'bg-green-500' },
-    { label: 'Urgent Cases', value: acceptedCases.filter(c => c.status === 'urgent').length, icon: <AlertCircle size={20} />, color: 'bg-red-500' },
+    {
+      label: "Active Cases",
+      value: acceptedCases.filter((c) => c.status === "in-progress").length,
+      icon: <Scale size={20} />,
+      color: "bg-blue-500",
+    },
+    {
+      label: "Pending Review",
+      value: acceptedCases.filter((c) => c.status === "pending").length,
+      icon: <Clock size={20} />,
+      color: "bg-yellow-500",
+    },
+    {
+      label: "Completed",
+      value: acceptedCases.filter((c) => c.status === "completed").length,
+      icon: <CheckCircle size={20} />,
+      color: "bg-green-500",
+    },
+    {
+      label: "Urgent Cases",
+      value: acceptedCases.filter((c) => c.status === "urgent").length,
+      icon: <AlertCircle size={20} />,
+      color: "bg-red-500",
+    },
   ];
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setEditUser({ ...editUser, profileImage: reader.result as string });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/updateProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editUser),
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        setUser(updated);
+        setEditUser(updated);
+        setShowEditModal(false);
+        alert("Profile updated successfully!");
+      } else {
+        alert("Update failed");
+      }
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      alert("Something went wrong.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -168,19 +280,37 @@ const LawyerDashboard = () => {
       <nav className="bg-white shadow flex items-center justify-between px-6 py-4">
         <div className="flex items-center space-x-3">
           <Scale className="text-indigo-600" size={28} />
-          <h1 className="text-2xl font-bold text-indigo-600">Lawyer Dashboard</h1>
+          <h1 className="text-2xl font-bold text-indigo-600">
+            Lawyer Dashboard
+          </h1>
         </div>
         {user && (
           <div className="flex items-center space-x-4">
             <div className="text-right">
               <p className="text-gray-600 font-medium">
-                Welcome back, <span className="font-semibold text-indigo-700">{user.name}</span>
+                Welcome back,{" "}
+                <span className="font-semibold text-indigo-700">
+                  {user.name}
+                </span>
               </p>
               <p className="text-xs text-gray-500">{user.specialization}</p>
             </div>
-            <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
-              <User className="text-indigo-600" size={20} />
-            </div>
+            <button
+              onClick={() => setShowEditModal(true)}
+              className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center hover:ring-2 ring-indigo-300 transition"
+            >
+              {user?.profileImage ? (
+                <Image
+                  src={user.profileImage}
+                  alt="Profile"
+                  width={40}
+                  height={40}
+                  className="rounded-full object-cover"
+                />
+              ) : (
+                <User className="text-indigo-600" size={20} />
+              )}
+            </button>
           </div>
         )}
       </nav>
@@ -199,7 +329,9 @@ const LawyerDashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+                  <p className="text-2xl font-bold text-gray-800">
+                    {stat.value}
+                  </p>
                 </div>
                 <div className={`p-3 rounded-full ${stat.color} text-white`}>
                   {stat.icon}
@@ -217,8 +349,8 @@ const LawyerDashboard = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium whitespace-nowrap transition-colors ${
                 activeTab === tab.id
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                  ? "bg-indigo-600 text-white shadow-md"
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
               }`}
             >
               {tab.icon}
@@ -230,34 +362,53 @@ const LawyerDashboard = () => {
         {/* Main Content */}
         <div className="bg-white rounded-lg shadow">
           {/* Profile Tab */}
-          {activeTab === 'profile' && (
+          {activeTab === "profile" && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="p-6"
             >
-              <h2 className="text-xl font-semibold mb-6">Professional Profile</h2>
+              <h2 className="text-xl font-semibold mb-6">
+                Professional Profile
+              </h2>
+
+              {user?.profileImage && (
+                <div className="flex justify-center mb-6">
+                  <Image
+                    src={user.profileImage}
+                    alt="Profile"
+                    width={120}
+                    height={120}
+                    className="rounded-full object-cover border-4 border-indigo-500"
+                  />
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <User className="text-gray-500" size={20} />
                     <div>
                       <p className="font-medium">Full Name</p>
-                      <p className="text-gray-600">{user?.name || 'N/A'}</p>
+                      <p className="text-gray-600">{user?.name || "N/A"}</p>
                     </div>
                   </div>
+
                   <div className="flex items-center space-x-3">
                     <Mail className="text-gray-500" size={20} />
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-gray-600">{user?.email || 'Not provided'}</p>
+                      <p className="text-gray-600">
+                        {user?.email || "Not provided"}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Phone className="text-gray-500" size={20} />
                     <div>
                       <p className="font-medium">Phone</p>
-                      <p className="text-gray-600">{user?.phone || 'Not provided'}</p>
+                      <p className="text-gray-600">
+                        {user?.phone || "Not provided"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -266,21 +417,27 @@ const LawyerDashboard = () => {
                     <Scale className="text-gray-500" size={20} />
                     <div>
                       <p className="font-medium">Specialization</p>
-                      <p className="text-gray-600">{user?.specialization || 'N/A'}</p>
+                      <p className="text-gray-600">
+                        {user?.specialization || "N/A"}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <TrendingUp className="text-gray-500" size={20} />
                     <div>
                       <p className="font-medium">Experience</p>
-                      <p className="text-gray-600">{user?.experience || 'N/A'}</p>
+                      <p className="text-gray-600">
+                        {user?.experience || "N/A"}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <FileText className="text-gray-500" size={20} />
                     <div>
                       <p className="font-medium">Bar Registration</p>
-                      <p className="text-gray-600">{user?.barNumber || 'N/A'}</p>
+                      <p className="text-gray-600">
+                        {user?.barNumber || "N/A"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -289,7 +446,7 @@ const LawyerDashboard = () => {
           )}
 
           {/* Cases Tab */}
-          {activeTab === 'cases' && (
+          {activeTab === "cases" && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -319,20 +476,38 @@ const LawyerDashboard = () => {
                 <table className="w-full text-sm">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-4 py-3 text-left font-medium text-gray-700">Case ID</th>
-                      <th className="px-4 py-3 text-left font-medium text-gray-700">Client</th>
-                      <th className="px-4 py-3 text-left font-medium text-gray-700">Case Type</th>
-                      <th className="px-4 py-3 text-left font-medium text-gray-700">Description</th>
-                      <th className="px-4 py-3 text-left font-medium text-gray-700">Status</th>
-                      <th className="px-4 py-3 text-left font-medium text-gray-700">Priority</th>
-                      <th className="px-4 py-3 text-left font-medium text-gray-700">Date</th>
-                      <th className="px-4 py-3 text-left font-medium text-gray-700">Actions</th>
+                      <th className="px-4 py-3 text-left font-medium text-gray-700">
+                        Case ID
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium text-gray-700">
+                        Client
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium text-gray-700">
+                        Case Type
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium text-gray-700">
+                        Description
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium text-gray-700">
+                        Status
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium text-gray-700">
+                        Priority
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium text-gray-700">
+                        Date
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium text-gray-700">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {filteredCases.map((caseItem) => (
                       <tr key={caseItem.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3 font-medium text-indigo-600">#{caseItem.id}</td>
+                        <td className="px-4 py-3 font-medium text-indigo-600">
+                          #{caseItem.id}
+                        </td>
                         <td className="px-4 py-3">{caseItem.clientName}</td>
                         <td className="px-4 py-3">
                           <span className="inline-block px-2 py-1 text-xs bg-indigo-100 text-indigo-800 rounded-full">
@@ -345,16 +520,26 @@ const LawyerDashboard = () => {
                           </p>
                         </td>
                         <td className="px-4 py-3">
-                          <span className={`inline-block px-2 py-1 text-xs rounded-full ${getStatusColor(caseItem.status)}`}>
-                            {caseItem.status.replace('-', ' ')}
+                          <span
+                            className={`inline-block px-2 py-1 text-xs rounded-full ${getStatusColor(
+                              caseItem.status
+                            )}`}
+                          >
+                            {caseItem.status.replace("-", " ")}
                           </span>
                         </td>
                         <td className="px-4 py-3">
-                          <span className={`font-medium ${getPriorityColor(caseItem.priority)}`}>
+                          <span
+                            className={`font-medium ${getPriorityColor(
+                              caseItem.priority
+                            )}`}
+                          >
                             {caseItem.priority}
                           </span>
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap">{caseItem.date}</td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          {caseItem.date}
+                        </td>
                         <td className="px-4 py-3">
                           <div className="flex space-x-2">
                             <button className="text-indigo-600 hover:text-indigo-800">
@@ -374,7 +559,7 @@ const LawyerDashboard = () => {
           )}
 
           {/* Clients Tab */}
-          {activeTab === 'clients' && (
+          {activeTab === "clients" && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -382,8 +567,13 @@ const LawyerDashboard = () => {
             >
               <h2 className="text-xl font-semibold mb-6">Client Directory</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from(new Set(acceptedCases.map(c => c.clientName))).map((clientName, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                {Array.from(
+                  new Set(acceptedCases.map((c) => c.clientName))
+                ).map((clientName, index) => (
+                  <div
+                    key={index}
+                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  >
                     <div className="flex items-center space-x-3">
                       <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
                         <User className="text-indigo-600" size={20} />
@@ -391,7 +581,12 @@ const LawyerDashboard = () => {
                       <div>
                         <h3 className="font-medium">{clientName}</h3>
                         <p className="text-sm text-gray-600">
-                          {acceptedCases.filter(c => c.clientName === clientName).length} case(s)
+                          {
+                            acceptedCases.filter(
+                              (c) => c.clientName === clientName
+                            ).length
+                          }{" "}
+                          case(s)
                         </p>
                       </div>
                     </div>
@@ -402,13 +597,15 @@ const LawyerDashboard = () => {
           )}
 
           {/* Analytics Tab */}
-          {activeTab === 'analytics' && (
+          {activeTab === "analytics" && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="p-6"
             >
-              <h2 className="text-xl font-semibold mb-6">Performance Analytics</h2>
+              <h2 className="text-xl font-semibold mb-6">
+                Performance Analytics
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="border border-gray-200 rounded-lg p-4">
                   <h3 className="font-medium mb-4">Case Distribution</h3>
@@ -419,7 +616,10 @@ const LawyerDashboard = () => {
                         return acc;
                       }, {} as Record<string, number>)
                     ).map(([type, count]) => (
-                      <div key={type} className="flex justify-between items-center">
+                      <div
+                        key={type}
+                        className="flex justify-between items-center"
+                      >
                         <span className="text-sm">{type}</span>
                         <span className="font-medium">{count}</span>
                       </div>
@@ -431,18 +631,30 @@ const LawyerDashboard = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-sm">Total Cases</span>
-                      <span className="font-medium">{acceptedCases.length}</span>
+                      <span className="font-medium">
+                        {acceptedCases.length}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Completion Rate</span>
                       <span className="font-medium">
-                        {Math.round((acceptedCases.filter(c => c.status === 'completed').length / acceptedCases.length) * 100)}%
+                        {Math.round(
+                          (acceptedCases.filter((c) => c.status === "completed")
+                            .length /
+                            acceptedCases.length) *
+                            100
+                        )}
+                        %
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Estimated Hours</span>
                       <span className="font-medium">
-                        {acceptedCases.reduce((sum, c) => sum + (c.estimatedHours || 0), 0)}h
+                        {acceptedCases.reduce(
+                          (sum, c) => sum + (c.estimatedHours || 0),
+                          0
+                        )}
+                        h
                       </span>
                     </div>
                   </div>
@@ -452,22 +664,26 @@ const LawyerDashboard = () => {
           )}
 
           {/* Calendar Tab */}
-          {activeTab === 'calendar' && (
+          {activeTab === "calendar" && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="p-6"
             >
-              <h2 className="text-xl font-semibold mb-6">Calendar & Appointments</h2>
+              <h2 className="text-xl font-semibold mb-6">
+                Calendar & Appointments
+              </h2>
               <div className="text-center py-12">
                 <Calendar className="mx-auto text-gray-400 mb-4" size={48} />
-                <p className="text-gray-600">Calendar integration coming soon</p>
+                <p className="text-gray-600">
+                  Calendar integration coming soon
+                </p>
               </div>
             </motion.div>
           )}
 
           {/* Messages Tab */}
-          {activeTab === 'messages' && (
+          {activeTab === "messages" && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -475,13 +691,100 @@ const LawyerDashboard = () => {
             >
               <h2 className="text-xl font-semibold mb-6">Client Messages</h2>
               <div className="text-center py-12">
-                <MessageSquare className="mx-auto text-gray-400 mb-4" size={48} />
+                <MessageSquare
+                  className="mx-auto text-gray-400 mb-4"
+                  size={48}
+                />
                 <p className="text-gray-600">Messaging system coming soon</p>
               </div>
             </motion.div>
           )}
         </div>
       </div>
+      {showEditModal && user && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 space-y-4 relative">
+            <button
+              onClick={() => setShowEditModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-lg"
+            >
+              ✖
+            </button>
+            <h2 className="text-xl font-semibold mb-2">Edit Profile</h2>
+            <form onSubmit={handleProfileUpdate} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Profile Image
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e)}
+                  className="block w-full text-sm text-gray-700"
+                />
+                {editUser.profileImage && (
+                  <Image
+                    src={editUser.profileImage}
+                    alt="Profile"
+                    width={96}
+                    height={96}
+                    className="h-24 w-24 mt-2 rounded-full object-cover border"
+                  />
+                )}
+              </div>
+              <Input
+                label="Full Name"
+                value={editUser.name}
+                onChange={(e: { target: { value: any } }) =>
+                  setEditUser({ ...editUser, name: e.target.value })
+                }
+              />
+              <Input
+                label="Email"
+                value={editUser.email}
+                onChange={(e: { target: { value: any } }) =>
+                  setEditUser({ ...editUser, email: e.target.value })
+                }
+              />
+              <Input
+                label="Phone"
+                value={editUser.phone}
+                onChange={(e: { target: { value: any } }) =>
+                  setEditUser({ ...editUser, phone: e.target.value })
+                }
+              />
+              <Input
+                label="Specialization"
+                value={editUser.specialization}
+                onChange={(e: { target: { value: any } }) =>
+                  setEditUser({ ...editUser, specialization: e.target.value })
+                }
+              />
+              <Input
+                label="Experience"
+                value={editUser.experience}
+                onChange={(e: { target: { value: any } }) =>
+                  setEditUser({ ...editUser, experience: e.target.value })
+                }
+              />
+              <Input
+                label="Bar Number"
+                value={editUser.barNumber}
+                onChange={(e: { target: { value: any } }) =>
+                  setEditUser({ ...editUser, barNumber: e.target.value })
+                }
+              />
+
+              <button
+                type="submit"
+                className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+              >
+                Save Changes
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
