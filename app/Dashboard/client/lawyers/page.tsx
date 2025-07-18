@@ -1,5 +1,5 @@
 'use client';
-
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { Search, Star, Clock, MapPin, Phone, Mail, MessageCircle, Filter, Award, BookOpen, Users, Calendar, CheckCircle } from 'lucide-react';
 
@@ -27,161 +27,40 @@ interface Lawyer {
   priceRange: 'Budget' | 'Mid-range' | 'Premium';
 }
 
-const mockLawyers: Lawyer[] = [
-  {
-    id: '1',
-    name: 'Adv. Lawyer 1',
-    specialization: 'Family Law',
-    experience: 8,
-    rating: 4.8,
-    reviewCount: 156,
-    image: '/images/lawyer1.jpg',
-    acceptedCases: ['Divorce Case', 'Child Custody', 'Alimony Dispute', 'Domestic Violence', 'Adoption'],
-    location: 'New Delhi, India',
-    languages: ['Hindi', 'English', 'Punjabi'],
-    consultationFee: 1500,
-    responseTime: '2 hours',
-    bio: 'Specialized in family law with a compassionate approach. Successfully handled over 200 family disputes with high client satisfaction.',
-    education: ['LLB from Delhi University', 'LLM Family Law from JNU'],
-    certifications: ['Bar Council of India', 'Family Mediation Certificate'],
-    successRate: 89,
-    casesHandled: 234,
-    availability: 'Available',
-    phone: '+91-9876543210',
-    email: 'lawyer1@gmail.com',
-    priceRange: 'Mid-range'
-  },
-  {
-    id: '2',
-    name: 'Adv. Lawyer 2',
-    specialization: 'Criminal Law',
-    experience: 12,
-    rating: 4.9,
-    reviewCount: 203,
-    image: '/images/lawyer2.jpg',
-    acceptedCases: ['Theft Case', 'Assault', 'Fraud Investigation', 'Cybercrime', 'White Collar Crime'],
-    location: 'Mumbai, India',
-    languages: ['Hindi', 'English', 'Marathi'],
-    consultationFee: 2000,
-    responseTime: '1 hour',
-    bio: 'Expert criminal lawyer with extensive experience in high-profile cases. Known for strategic defense and thorough case preparation.',
-    education: ['LLB from Mumbai University', 'LLM Criminal Law from ILS'],
-    certifications: ['Bar Council of Maharashtra', 'Criminal Law Specialist'],
-    successRate: 92,
-    casesHandled: 189,
-    availability: 'Available',
-    phone: '+91-9876543211',
-    email: 'Lawyer2@gmail.com',
-    priceRange: 'Premium'
-  },
-  {
-    id: '3',
-    name: 'Adv. Lawyer 3',
-    specialization: 'Civil Law',
-    experience: 6,
-    rating: 4.7,
-    reviewCount: 98,
-    image: '/images/lawyer3.jpg',
-    acceptedCases: ['Property Dispute', 'Land Registration', 'Rent Agreement', 'Contract Disputes', 'Consumer Issues'],
-    location: 'Bangalore, India',
-    languages: ['Hindi', 'English', 'Kannada'],
-    consultationFee: 1200,
-    responseTime: '3 hours',
-    bio: 'Young and dynamic civil lawyer with modern approach to legal solutions. Specializes in property and commercial disputes.',
-    education: ['LLB from Bangalore University', 'Diploma in Corporate Law'],
-    certifications: ['Bar Council of Karnataka', 'Property Law Certificate'],
-    successRate: 85,
-    casesHandled: 156,
-    availability: 'Busy',
-    phone: '+91-9876543212',
-    email: 'Lawyer3@gmail.com',
-    priceRange: 'Budget'
-  },
-  {
-    id: '4',
-    name: 'Adv. Lawyer 4',
-    specialization: 'Corporate Law',
-    experience: 10,
-    rating: 4.6,
-    reviewCount: 134,
-    image: '/images/lawyer4.jpg',
-    acceptedCases: ['Company Registration', 'Mergers & Acquisitions', 'Compliance', 'Employment Law', 'IPR'],
-    location: 'Ahmedabad, India',
-    languages: ['Hindi', 'English', 'Gujarati'],
-    consultationFee: 2500,
-    responseTime: '4 hours',
-    bio: 'Corporate law expert with experience in startup ecosystem and large corporate transactions. Trusted advisor for business legal matters.',
-    education: ['LLB from Gujarat University', 'LLM Corporate Law from NLIU'],
-    certifications: ['Bar Council of Gujarat', 'Company Secretary'],
-    successRate: 94,
-    casesHandled: 278,
-    availability: 'Available',
-    phone: '+91-9876543213',
-    email: 'Lawyer4@gmail.com',
-    priceRange: 'Premium'
-  },
-  {
-    id: '5',
-    name: 'Adv. Lawyer 5',
-    specialization: 'Divorce Law',
-    experience: 7,
-    rating: 4.5,
-    reviewCount: 87,
-    image: '/images/lawyer5.jpg',
-    acceptedCases: ['Visa Applications', 'Work Permits', 'Citizenship', 'Deportation Defense', 'Green Card'],
-    location: 'Hyderabad, India',
-    languages: ['Hindi', 'English', 'Telugu'],
-    consultationFee: 1800,
-    responseTime: '2 hours',
-    bio: 'Immigration specialist with successful track record in visa applications and citizenship matters. Up-to-date with latest immigration policies.',
-    education: ['LLB from Osmania University', 'Certificate in Immigration Law'],
-    certifications: ['Bar Council of Telangana', 'Immigration Law Specialist'],
-    successRate: 88,
-    casesHandled: 167,
-    availability: 'Available',
-    phone: '+91-9876543214',
-    email: 'Lawyer5@gmail.com',
-    priceRange: 'Mid-range'
-  },
-  {
-    id: '6',
-    name: 'Adv. Lawyer 6',
-    specialization: 'Tax Law',
-    experience: 15,
-    rating: 4.8,
-    reviewCount: 178,
-    image: '/images/lawyer6.jpg',
-    acceptedCases: ['Income Tax', 'GST Disputes', 'Tax Planning', 'Appeals', 'Corporate Tax'],
-    location: 'Kolkata, India',
-    languages: ['Hindi', 'English', 'Bengali'],
-    consultationFee: 2200,
-    responseTime: '1 hour',
-    bio: 'Senior tax lawyer with deep expertise in direct and indirect taxation. Handles complex tax disputes and provides strategic tax planning.',
-    education: ['LLB from Calcutta University', 'LLM Tax Law', 'CA'],
-    certifications: ['Bar Council of West Bengal', 'Tax Law Expert'],
-    successRate: 91,
-    casesHandled: 312,
-    availability: 'Offline',
-    phone: '+91-9876543215',
-    email: 'Lawyer6@gmail.com',
-    priceRange: 'Premium'
-  }
-];
-
 const specializations = ['All', 'Family Law', 'Criminal Law', 'Civil Law', 'Corporate Law', 'Immigration Law', 'Tax Law'];
 const locations = ['All', 'New Delhi', 'Mumbai', 'Bangalore', 'Ahmedabad', 'Hyderabad', 'Kolkata'];
 const priceRanges = ['All', 'Budget', 'Mid-range', 'Premium'];
 
 export default function LawyersPage() {
-  const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
-  const [search, setSearch] = useState('');
+  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
+const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
+const [search, setSearch] = useState('');
+
   const [selectedSpecialization, setSelectedSpecialization] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState('All');
   const [selectedPriceRange, setSelectedPriceRange] = useState('All');
   const [sortBy, setSortBy] = useState('rating');
   const [showFilters, setShowFilters] = useState(false);
 
-  const filteredLawyers = mockLawyers
+  useEffect(() => {
+  const fetchLawyers = async () => {
+    try {
+      const response = await fetch('/api/lawyers');
+      const data = await response.json();
+      console.log("Fetched lawyers:", data);
+      setLawyers(data);
+    } catch (error) {
+      console.error('Failed to fetch lawyers:', error);
+    }
+  };
+
+  fetchLawyers();
+}, []);
+
+
+
+
+  const filteredLawyers = lawyers
     .filter((lawyer) => {
       const matchesSearch = lawyer.name.toLowerCase().includes(search.toLowerCase()) ||
                            lawyer.specialization.toLowerCase().includes(search.toLowerCase());
