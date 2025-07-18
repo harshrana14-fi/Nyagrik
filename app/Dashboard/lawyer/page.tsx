@@ -53,7 +53,7 @@ type TabId =
   | "calendar"
   | "messages";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 const Input = ({
   label,
   value,
@@ -61,7 +61,7 @@ const Input = ({
 }: {
   label: string;
   value?: string;
-  onChange: any;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <div>
     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -735,42 +735,47 @@ const LawyerDashboard = () => {
               <Input
                 label="Full Name"
                 value={editUser.name}
-                onChange={(e: { target: { value: any } }) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setEditUser({ ...editUser, name: e.target.value })
                 }
               />
+
               <Input
                 label="Email"
                 value={editUser.email}
-                onChange={(e: { target: { value: any } }) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setEditUser({ ...editUser, email: e.target.value })
                 }
               />
+
               <Input
                 label="Phone"
                 value={editUser.phone}
-                onChange={(e: { target: { value: any } }) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setEditUser({ ...editUser, phone: e.target.value })
                 }
               />
+
               <Input
                 label="Specialization"
                 value={editUser.specialization}
-                onChange={(e: { target: { value: any } }) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setEditUser({ ...editUser, specialization: e.target.value })
                 }
               />
+
               <Input
                 label="Experience"
                 value={editUser.experience}
-                onChange={(e: { target: { value: any } }) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setEditUser({ ...editUser, experience: e.target.value })
                 }
               />
+
               <Input
                 label="Bar Number"
                 value={editUser.barNumber}
-                onChange={(e: { target: { value: any } }) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setEditUser({ ...editUser, barNumber: e.target.value })
                 }
               />
