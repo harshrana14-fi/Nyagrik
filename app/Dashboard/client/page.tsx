@@ -93,7 +93,7 @@ export default function ClientDashboardPage() {
     <div className="min-h-screen bg-gray-100">
       {/* Navbar */}
       <nav className="bg-white shadow flex items-center justify-between px-6 py-4">
-        <h1 className="text-2xl font-bold text-indigo-600">Nyagrik Dashboard</h1>
+        <h1 className="text-2xl font-bold text-indigo-600">Client Dashboard</h1>
         {user && (
           <p className="text-gray-600 font-medium">
             Welcome back, <span className="font-semibold text-indigo-700">{user.name}</span>
