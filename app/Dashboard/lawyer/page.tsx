@@ -89,6 +89,32 @@ const LawyerDashboard = () => {
     experience: "",
     barNumber: "",
   });
+  useEffect(() => {
+  const fetchUserData = async () => {
+    if (!editUser?.email) return;
+
+    try {
+      const res = await fetch("/api/getProfile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: editUser.email }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+        setEditUser(data); // keep both in sync
+      } else {
+        console.error("Failed to fetch profile");
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+
+  fetchUserData();
+}, [editUser.email]);
+
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [acceptedCases] = useState<CaseItem[]>([
@@ -703,7 +729,8 @@ const LawyerDashboard = () => {
       </div>
       {showEditModal && user && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 space-y-4 relative">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 space-y-4 relative max-h-[90vh] overflow-y-auto">
+
             <button
               onClick={() => setShowEditModal(false)}
               className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-lg"
