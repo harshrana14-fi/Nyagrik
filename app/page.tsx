@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Scale, Users, Award, Shield, BookOpen, } from 'lucide-react';
 import Link from 'next/link';
+import Navbar from './components/Navbar';
 
 
 const NyayWebsite = () => {
@@ -79,6 +80,7 @@ const NyayWebsite = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <Navbar/>
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
         {/* Background Carousel */}

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { UploadCloud } from 'lucide-react';
+import { UploadCloud, } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 type CaseItem = {
@@ -37,7 +37,9 @@ export default function ClientDashboardPage() {
         const data = await res.json();
         setUser(data);
 
-        const historyRes = await fetch('/api/history', { credentials: 'include' });
+        const historyRes = await fetch('/api/history', {
+          credentials: 'include',
+        });
         const historyData = await historyRes.json();
 
         if (historyRes.ok) {
@@ -50,14 +52,15 @@ export default function ClientDashboardPage() {
     };
 
     checkAuthAndFetchUser();
-  }, [router]); // ✅ router added to dependency array
+  }, [router]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) setFile(e.target.files[0]);
   };
 
   const handleSubmit = async () => {
-    if (!file || !description) return alert('Please upload a file and enter description');
+    if (!file || !description)
+      return alert('Please upload a file and enter description');
 
     const res = await fetch('/api/analyze', {
       method: 'POST',
@@ -89,24 +92,42 @@ export default function ClientDashboardPage() {
     { id: 'connect', label: 'Connect with Lawyer/Intern' },
   ];
 
+  const getInitials = (name?: string) => {
+    if (!name) return 'U';
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Navbar */}
-      <nav className="bg-white shadow flex items-center justify-between px-6 py-4">
-        <h1 className="text-2xl font-bold text-indigo-600">Client Dashboard</h1>
+      {/* Top Bar */}
+      <nav className="bg-white border-b border-gray-200 px-6 py-2 flex items-center justify-between shadow-sm">
+        <h1 className="text-2xl font-bold text-indigo-700">Client Dashboard</h1>
         {user && (
-          <p className="text-gray-600 font-medium">
-            Welcome back, <span className="font-semibold text-indigo-700">{user.name}</span>
-          </p>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 font-semibold flex items-center justify-center text-sm shadow">
+              {getInitials(user.name)}
+            </div>
+            <p className="text-gray-700 text-sm">
+              Welcome back, <span className="font-medium text-indigo-700">{user.name}</span>
+            </p>
+          </div>
         )}
       </nav>
 
       {/* Tabs */}
-      <div className="flex space-x-4 justify-center mt-6">
+      <div className="flex space-x-4 justify-center mt-4">
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)} // ✅ No `as any` needed
+            onClick={() =>
+              tab.id === 'connect'
+                ? router.push('/Dashboard/client/lawyers')
+                : setActiveTab(tab.id)
+            }
             className={`px-4 py-2 rounded-md font-medium ${
               activeTab === tab.id
                 ? 'bg-indigo-600 text-white'
@@ -118,28 +139,32 @@ export default function ClientDashboardPage() {
         ))}
       </div>
 
-      {/* Main Content */}
+      {/* Content Area */}
       <div className="max-w-5xl mx-auto p-6">
-        {/* Profile Tab */}
         {activeTab === 'profile' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-white p-6 rounded-lg shadow"
+            className="bg-white p-6 rounded-xl shadow-lg"
           >
             <h2 className="text-xl font-semibold mb-4">Your Profile</h2>
-            <p><strong>Name:</strong> {user?.name || 'N/A'}</p>
-            <p><strong>Role:</strong> Client</p>
-            <p><strong>Email:</strong> {user?.email || 'Not provided'}</p>
+            <p>
+              <strong>Name:</strong> {user?.name || 'N/A'}
+            </p>
+            <p>
+              <strong>Role:</strong> Client
+            </p>
+            <p>
+              <strong>Email:</strong> {user?.email || 'Not provided'}
+            </p>
           </motion.div>
         )}
 
-        {/* Upload Tab */}
         {activeTab === 'upload' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-white p-6 rounded-lg shadow"
+            className="bg-white p-6 rounded-xl shadow-lg"
           >
             <h2 className="text-xl font-semibold mb-4">Upload New Case</h2>
             <input
@@ -170,12 +195,11 @@ export default function ClientDashboardPage() {
           </motion.div>
         )}
 
-        {/* History Tab */}
         {activeTab === 'history' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-white p-6 rounded-lg shadow"
+            className="bg-white p-6 rounded-xl shadow-lg"
           >
             <h2 className="text-xl font-semibold mb-4">Report History</h2>
             <table className="w-full text-left border-collapse">
@@ -194,8 +218,12 @@ export default function ClientDashboardPage() {
                       {new Date(item.date).toLocaleDateString()}
                     </td>
                     <td className="p-2 whitespace-nowrap">{item.fileName || 'N/A'}</td>
-                    <td className="p-2">{item.description?.slice(0, 40) || 'N/A'}...</td>
-                    <td className="p-2">{item.analysis?.slice(0, 50) || 'N/A'}...</td>
+                    <td className="p-2">
+                      {item.description?.slice(0, 40) || 'N/A'}...
+                    </td>
+                    <td className="p-2">
+                      {item.analysis?.slice(0, 50) || 'N/A'}...
+                    </td>
                   </tr>
                 ))}
                 {!caseHistory.length && (
@@ -207,18 +235,6 @@ export default function ClientDashboardPage() {
                 )}
               </tbody>
             </table>
-          </motion.div>
-        )}
-
-        {/* Connect Tab */}
-        {activeTab === 'connect' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="bg-white p-6 rounded-lg shadow"
-          >
-            <h2 className="text-xl font-semibold mb-4">Connect With Lawyer or Intern</h2>
-            <p className="text-gray-600">(Connection feature coming soon)</p>
           </motion.div>
         )}
       </div>

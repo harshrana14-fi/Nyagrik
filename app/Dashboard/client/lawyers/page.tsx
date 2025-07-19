@@ -1,7 +1,21 @@
-'use client';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { Search, Star, Clock, MapPin, Phone, Mail, MessageCircle, Filter, Award, BookOpen, Users, Calendar, CheckCircle } from 'lucide-react';
+"use client";
+import { useEffect } from "react";
+import { useState } from "react";
+import {
+  Search,
+  Star,
+  Clock,
+  MapPin,
+  Phone,
+  Mail,
+  MessageCircle,
+  Filter,
+  Award,
+  BookOpen,
+  Users,
+  Calendar,
+  CheckCircle,
+} from "lucide-react";
 
 interface Lawyer {
   id: string;
@@ -21,62 +35,87 @@ interface Lawyer {
   certifications: string[];
   successRate: number;
   casesHandled: number;
-  availability: 'Available' | 'Busy' | 'Offline';
+  availability: "Available" | "Busy" | "Offline";
   phone: string;
   email: string;
-  priceRange: 'Budget' | 'Mid-range' | 'Premium';
+  priceRange: "Budget" | "Mid-range" | "Premium";
 }
 
-const specializations = ['All', 'Family Law', 'Criminal Law', 'Civil Law', 'Corporate Law', 'Immigration Law', 'Tax Law'];
-const locations = ['All', 'New Delhi', 'Mumbai', 'Bangalore', 'Ahmedabad', 'Hyderabad', 'Kolkata'];
-const priceRanges = ['All', 'Budget', 'Mid-range', 'Premium'];
+const specializations = [
+  "All",
+  "Family Law",
+  "Criminal Law",
+  "Civil Law",
+  "Corporate Law",
+  "Immigration Law",
+  "Tax Law",
+];
+const locations = [
+  "All",
+  "New Delhi",
+  "Mumbai",
+  "Bangalore",
+  "Ahmedabad",
+  "Hyderabad",
+  "Kolkata",
+];
+const priceRanges = ["All", "Budget", "Mid-range", "Premium"];
 
 export default function LawyersPage() {
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
-const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
-const [search, setSearch] = useState('');
+  const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
+  const [search, setSearch] = useState("");
 
-  const [selectedSpecialization, setSelectedSpecialization] = useState('All');
-  const [selectedLocation, setSelectedLocation] = useState('All');
-  const [selectedPriceRange, setSelectedPriceRange] = useState('All');
-  const [sortBy, setSortBy] = useState('rating');
+  const [selectedSpecialization, setSelectedSpecialization] = useState("All");
+  const [selectedLocation, setSelectedLocation] = useState("All");
+  const [selectedPriceRange, setSelectedPriceRange] = useState("All");
+  const [sortBy, setSortBy] = useState("rating");
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-  const fetchLawyers = async () => {
-    try {
-      const response = await fetch('/api/lawyers');
-      const data = await response.json();
-      console.log("Fetched lawyers:", data);
-      setLawyers(data);
-    } catch (error) {
-      console.error('Failed to fetch lawyers:', error);
-    }
-  };
+    const fetchLawyers = async () => {
+      try {
+        const response = await fetch("/api/lawyers");
+        const data = await response.json();
+        console.log("Fetched lawyers:", data);
+        setLawyers(data);
+      } catch (error) {
+        console.error("Failed to fetch lawyers:", error);
+      }
+    };
 
-  fetchLawyers();
-}, []);
-
-
-
+    fetchLawyers();
+  }, []);
 
   const filteredLawyers = lawyers
     .filter((lawyer) => {
-      const matchesSearch = lawyer.name.toLowerCase().includes(search.toLowerCase()) ||
-                           lawyer.specialization.toLowerCase().includes(search.toLowerCase());
-      const matchesSpecialization = selectedSpecialization === 'All' || lawyer.specialization === selectedSpecialization;
-      const matchesLocation = selectedLocation === 'All' || lawyer.location.includes(selectedLocation);
-      const matchesPriceRange = selectedPriceRange === 'All' || lawyer.priceRange === selectedPriceRange;
-      
-      return matchesSearch && matchesSpecialization && matchesLocation && matchesPriceRange;
+      const matchesSearch =
+        lawyer.name.toLowerCase().includes(search.toLowerCase()) ||
+        lawyer.specialization.toLowerCase().includes(search.toLowerCase());
+      const matchesSpecialization =
+        selectedSpecialization === "All" ||
+        lawyer.specialization === selectedSpecialization;
+      const matchesLocation =
+        selectedLocation === "All" ||
+        lawyer.location.includes(selectedLocation);
+      const matchesPriceRange =
+        selectedPriceRange === "All" ||
+        lawyer.priceRange === selectedPriceRange;
+
+      return (
+        matchesSearch &&
+        matchesSpecialization &&
+        matchesLocation &&
+        matchesPriceRange
+      );
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case 'rating':
+        case "rating":
           return b.rating - a.rating;
-        case 'experience':
+        case "experience":
           return b.experience - a.experience;
-        case 'price':
+        case "price":
           return a.consultationFee - b.consultationFee;
         default:
           return 0;
@@ -85,27 +124,27 @@ const [search, setSearch] = useState('');
 
   const getAvailabilityColor = (availability: string) => {
     switch (availability) {
-      case 'Available':
-        return 'text-green-600 bg-green-100';
-      case 'Busy':
-        return 'text-yellow-600 bg-yellow-100';
-      case 'Offline':
-        return 'text-red-600 bg-red-100';
+      case "Available":
+        return "text-green-600 bg-green-100";
+      case "Busy":
+        return "text-yellow-600 bg-yellow-100";
+      case "Offline":
+        return "text-red-600 bg-red-100";
       default:
-        return 'text-gray-600 bg-gray-100';
+        return "text-gray-600 bg-gray-100";
     }
   };
 
   const getPriceRangeColor = (priceRange: string) => {
     switch (priceRange) {
-      case 'Budget':
-        return 'text-green-600 bg-green-100';
-      case 'Mid-range':
-        return 'text-blue-600 bg-blue-100';
-      case 'Premium':
-        return 'text-purple-600 bg-purple-100';
+      case "Budget":
+        return "text-green-600 bg-green-100";
+      case "Mid-range":
+        return "text-blue-600 bg-blue-100";
+      case "Premium":
+        return "text-purple-600 bg-purple-100";
       default:
-        return 'text-gray-600 bg-gray-100';
+        return "text-gray-600 bg-gray-100";
     }
   };
 
@@ -120,22 +159,38 @@ const [search, setSearch] = useState('');
                 <Users className="text-indigo-600" size={40} />
                 Find Expert Lawyers
               </h1>
-              <p className="text-gray-600 mt-2">Connect with verified legal professionals across India</p>
+              <p className="text-gray-600 mt-2">
+                Connect with verified legal professionals across India
+              </p>
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-500">Trusted by</p>
-              <p className="text-2xl font-bold text-indigo-600">10,000+ clients</p>
+              <p className="text-2xl font-bold text-indigo-600">
+                10,000+ clients
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="mb-6">
+          <button
+            onClick={() => (window.location.href = "/Dashboard/client")}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition rounded-lg font-medium"
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
+
         {/* Search and Filters */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex flex-col lg:flex-row gap-4 mb-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 text-gray-400" size={20} />
+              <Search
+                className="absolute left-3 top-3 text-gray-400"
+                size={20}
+              />
               <input
                 type="text"
                 placeholder="Search by name, specialization, or location..."
@@ -156,43 +211,57 @@ const [search, setSearch] = useState('');
           {showFilters && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Specialization</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Specialization
+                </label>
                 <select
                   value={selectedSpecialization}
                   onChange={(e) => setSelectedSpecialization(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  {specializations.map(spec => (
-                    <option key={spec} value={spec}>{spec}</option>
+                  {specializations.map((spec) => (
+                    <option key={spec} value={spec}>
+                      {spec}
+                    </option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Location
+                </label>
                 <select
                   value={selectedLocation}
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  {locations.map(loc => (
-                    <option key={loc} value={loc}>{loc}</option>
+                  {locations.map((loc) => (
+                    <option key={loc} value={loc}>
+                      {loc}
+                    </option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Price Range
+                </label>
                 <select
                   value={selectedPriceRange}
                   onChange={(e) => setSelectedPriceRange(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  {priceRanges.map(range => (
-                    <option key={range} value={range}>{range}</option>
+                  {priceRanges.map((range) => (
+                    <option key={range} value={range}>
+                      {range}
+                    </option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Sort By
+                </label>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
@@ -210,7 +279,8 @@ const [search, setSearch] = useState('');
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-gray-600">
-            Showing {filteredLawyers.length} lawyers {search && `for "${search}"`}
+            Showing {filteredLawyers.length} lawyers{" "}
+            {search && `for "${search}"`}
           </p>
         </div>
 
@@ -225,21 +295,33 @@ const [search, setSearch] = useState('');
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                    {lawyer.name.split(' ')[1]?.[0] || 'L'}
+                    {lawyer.name.split(" ")[1]?.[0] || "L"}
                   </div>
                   <div className="flex flex-col items-end">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getAvailabilityColor(lawyer.availability)}`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${getAvailabilityColor(
+                        lawyer.availability
+                      )}`}
+                    >
                       {lawyer.availability}
                     </span>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium mt-1 ${getPriceRangeColor(lawyer.priceRange)}`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium mt-1 ${getPriceRangeColor(
+                        lawyer.priceRange
+                      )}`}
+                    >
                       {lawyer.priceRange}
                     </span>
                   </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-800 mb-1">{lawyer.name}</h3>
-                <p className="text-indigo-600 font-medium mb-2">{lawyer.specialization}</p>
-                
+                <h3 className="text-xl font-bold text-gray-800 mb-1">
+                  {lawyer.name}
+                </h3>
+                <p className="text-indigo-600 font-medium mb-2">
+                  {lawyer.specialization}
+                </p>
+
                 <div className="flex items-center gap-4 mb-3 text-sm text-gray-600">
                   <div className="flex items-center gap-1">
                     <Clock size={14} />
@@ -247,19 +329,27 @@ const [search, setSearch] = useState('');
                   </div>
                   <div className="flex items-center gap-1">
                     <MapPin size={14} />
-                    {lawyer.location.split(',')[0]}
+                    {lawyer.location.split(",")[0]}
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-1">
-                    <Star className="text-yellow-400" size={16} fill="currentColor" />
+                    <Star
+                      className="text-yellow-400"
+                      size={16}
+                      fill="currentColor"
+                    />
                     <span className="font-medium">{lawyer.rating}</span>
-                    <span className="text-gray-500 text-sm">({lawyer.reviewCount})</span>
+                    <span className="text-gray-500 text-sm">
+                      ({lawyer.reviewCount})
+                    </span>
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-gray-500">Consultation</p>
-                    <p className="font-bold text-indigo-600">₹{lawyer.consultationFee}</p>
+                    <p className="font-bold text-indigo-600">
+                      ₹{lawyer.consultationFee}
+                    </p>
                   </div>
                 </div>
 
@@ -304,8 +394,12 @@ const [search, setSearch] = useState('');
             <div className="text-gray-400 mb-4">
               <Search size={48} className="mx-auto" />
             </div>
-            <h3 className="text-xl font-medium text-gray-600 mb-2">No lawyers found</h3>
-            <p className="text-gray-500">Try adjusting your search criteria or filters</p>
+            <h3 className="text-xl font-medium text-gray-600 mb-2">
+              No lawyers found
+            </h3>
+            <p className="text-gray-500">
+              Try adjusting your search criteria or filters
+            </p>
           </div>
         )}
       </div>
@@ -318,18 +412,28 @@ const [search, setSearch] = useState('');
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-4">
                   <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-2xl">
-                    {selectedLawyer.name.split(' ')[1]?.[0] || 'L'}
+                    {selectedLawyer.name.split(" ")[1]?.[0] || "L"}
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold text-gray-800">{selectedLawyer.name}</h2>
-                    <p className="text-indigo-600 font-medium text-lg">{selectedLawyer.specialization}</p>
+                    <h2 className="text-3xl font-bold text-gray-800">
+                      {selectedLawyer.name}
+                    </h2>
+                    <p className="text-indigo-600 font-medium text-lg">
+                      {selectedLawyer.specialization}
+                    </p>
                     <div className="flex items-center gap-4 mt-2">
-                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getAvailabilityColor(selectedLawyer.availability)}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${getAvailabilityColor(
+                          selectedLawyer.availability
+                        )}`}
+                      >
                         {selectedLawyer.availability}
                       </span>
                       <div className="flex items-center gap-1">
                         <Clock size={16} />
-                        <span className="text-sm text-gray-600">Responds in {selectedLawyer.responseTime}</span>
+                        <span className="text-sm text-gray-600">
+                          Responds in {selectedLawyer.responseTime}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -352,41 +456,62 @@ const [search, setSearch] = useState('');
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-gray-600">Experience:</span>
-                        <span className="font-medium">{selectedLawyer.experience} years</span>
+                        <span className="font-medium">
+                          {selectedLawyer.experience} years
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Rating:</span>
                         <div className="flex items-center gap-1">
-                          <Star className="text-yellow-400" size={16} fill="currentColor" />
-                          <span className="font-medium">{selectedLawyer.rating}</span>
-                          <span className="text-gray-500">({selectedLawyer.reviewCount} reviews)</span>
+                          <Star
+                            className="text-yellow-400"
+                            size={16}
+                            fill="currentColor"
+                          />
+                          <span className="font-medium">
+                            {selectedLawyer.rating}
+                          </span>
+                          <span className="text-gray-500">
+                            ({selectedLawyer.reviewCount} reviews)
+                          </span>
                         </div>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Success Rate:</span>
-                        <span className="font-medium text-green-600">{selectedLawyer.successRate}%</span>
+                        <span className="font-medium text-green-600">
+                          {selectedLawyer.successRate}%
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Cases Handled:</span>
-                        <span className="font-medium">{selectedLawyer.casesHandled}</span>
+                        <span className="font-medium">
+                          {selectedLawyer.casesHandled}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Consultation Fee:</span>
-                        <span className="font-medium text-indigo-600">₹{selectedLawyer.consultationFee}</span>
+                        <span className="font-medium text-indigo-600">
+                          ₹{selectedLawyer.consultationFee}
+                        </span>
                       </div>
                     </div>
                   </div>
 
                   <div>
                     <h3 className="text-lg font-semibold mb-3">About</h3>
-                    <p className="text-gray-700 text-sm leading-relaxed">{selectedLawyer.bio}</p>
+                    <p className="text-gray-700 text-sm leading-relaxed">
+                      {selectedLawyer.bio}
+                    </p>
                   </div>
 
                   <div>
                     <h3 className="text-lg font-semibold mb-3">Education</h3>
                     <ul className="space-y-1">
                       {selectedLawyer.education.map((edu, i) => (
-                        <li key={i} className="text-sm text-gray-700 flex items-center gap-2">
+                        <li
+                          key={i}
+                          className="text-sm text-gray-700 flex items-center gap-2"
+                        >
                           <BookOpen size={14} className="text-indigo-600" />
                           {edu}
                         </li>
@@ -398,7 +523,10 @@ const [search, setSearch] = useState('');
                     <h3 className="text-lg font-semibold mb-3">Languages</h3>
                     <div className="flex flex-wrap gap-2">
                       {selectedLawyer.languages.map((lang, i) => (
-                        <span key={i} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                        <span
+                          key={i}
+                          className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                        >
                           {lang}
                         </span>
                       ))}
@@ -408,10 +536,15 @@ const [search, setSearch] = useState('');
 
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-lg font-semibold mb-3">Specialization Areas</h3>
+                    <h3 className="text-lg font-semibold mb-3">
+                      Specialization Areas
+                    </h3>
                     <div className="grid grid-cols-1 gap-2">
                       {selectedLawyer.acceptedCases.map((caseType, i) => (
-                        <div key={i} className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                        <div
+                          key={i}
+                          className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg"
+                        >
                           <CheckCircle size={16} className="text-green-500" />
                           <span className="text-sm">{caseType}</span>
                         </div>
@@ -420,10 +553,15 @@ const [search, setSearch] = useState('');
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold mb-3">Certifications</h3>
+                    <h3 className="text-lg font-semibold mb-3">
+                      Certifications
+                    </h3>
                     <ul className="space-y-1">
                       {selectedLawyer.certifications.map((cert, i) => (
-                        <li key={i} className="text-sm text-gray-700 flex items-center gap-2">
+                        <li
+                          key={i}
+                          className="text-sm text-gray-700 flex items-center gap-2"
+                        >
                           <Award size={14} className="text-indigo-600" />
                           {cert}
                         </li>
@@ -432,11 +570,15 @@ const [search, setSearch] = useState('');
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold mb-3">Contact Information</h3>
+                    <h3 className="text-lg font-semibold mb-3">
+                      Contact Information
+                    </h3>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <MapPin size={16} className="text-gray-600" />
-                        <span className="text-sm">{selectedLawyer.location}</span>
+                        <span className="text-sm">
+                          {selectedLawyer.location}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Phone size={16} className="text-gray-600" />
@@ -473,7 +615,9 @@ const [search, setSearch] = useState('');
                     <button
                       onClick={() => {
                         // Handle schedule consultation
-                        alert(`Scheduling consultation with ${selectedLawyer.name}...`);
+                        alert(
+                          `Scheduling consultation with ${selectedLawyer.name}...`
+                        );
                       }}
                       className="w-full border border-indigo-600 text-indigo-600 py-3 px-6 rounded-lg hover:bg-indigo-50 transition font-medium flex items-center justify-center gap-2"
                     >
