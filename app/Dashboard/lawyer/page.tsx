@@ -21,7 +21,6 @@ import {
   Filter,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import ChatList from "@/app/components/ChatList";
 
 type CaseItem = {
   documents: string;
@@ -889,8 +888,13 @@ const LawyerDashboard = () => {
             >
               <h2 className="text-xl font-semibold mb-6">Client Messages</h2>
 
-              {/* Chat list */}
-              <ChatList/>
+              coming soon
+              <div className="text-center py-12">
+                <MessageSquare className="mx-auto text-gray-400 mb-4" size={48} />
+                <p className="text-gray-600">
+                  Messaging feature is under development
+                </p>
+              </div>
             </motion.div>
           )}
         </div>
