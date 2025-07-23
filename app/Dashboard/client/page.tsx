@@ -1,53 +1,64 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { UploadCloud, } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { UploadCloud, Eye, Download } from "lucide-react";
+import { motion } from "framer-motion";
 
 type CaseItem = {
-  _id?: string;
-  analysis?: string;
-  fileName?: string;
+  _id: string;
+  title: string;
   description: string;
-  date: string;
+  analysis?: string;
+  documents?: string[];
+  assignedLawyerId?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 type User = {
+  _id: string;
   role: string;
   name?: string;
   email?: string;
 };
 
-type TabId = 'profile' | 'upload' | 'history' | 'connect';
+type TabId = "profile" | "upload" | "history" | "connect";
 
 export default function ClientDashboardPage() {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
-  const [description, setDescription] = useState('');
-  const [aiResult, setAiResult] = useState('');
-  const [activeTab, setActiveTab] = useState<TabId>('profile');
+  const [description, setDescription] = useState("");
+  const [aiResult, setAiResult] = useState("");
+  const [activeTab, setActiveTab] = useState<TabId>("profile");
   const [user, setUser] = useState<User | null>(null);
   const [caseHistory, setCaseHistory] = useState<CaseItem[]>([]);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const checkAuthAndFetchUser = async () => {
       try {
-        const res = await fetch('/api/me', { credentials: 'include' });
+        const res = await fetch("/api/me", { credentials: "include" });
         const data = await res.json();
         setUser(data);
 
-        const historyRes = await fetch('/api/history', {
-          credentials: 'include',
+        const historyRes = await fetch("/api/case/assigned", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: data.userId,
+            role: "client",
+          }),
         });
         const historyData = await historyRes.json();
-
         if (historyRes.ok) {
-          setCaseHistory(historyData.history);
+          setCaseHistory(historyData.cases);
         }
       } catch (err) {
-        console.error('Error fetching user or history:', err);
-        router.push('/login');
+        console.error("Error fetching user or history:", err);
+        router.push("/login");
       }
     };
 
@@ -59,45 +70,67 @@ export default function ClientDashboardPage() {
   };
 
   const handleSubmit = async () => {
-    if (!file || !description)
-      return alert('Please upload a file and enter description');
+    if (!file || !description || !user?._id)
+      return alert("Please upload a file and enter description");
 
-    const res = await fetch('/api/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ description, fileName: file.name }),
     });
 
     const data = await res.json();
+    if (!data.success) return alert("AI analysis failed");
 
-    if (!data.success) return alert('AI analysis failed');
+    const uploadRes = await fetch("/api/case/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: file.name,
+        description,
+        clientId: user._id,
+        documents: [file.name],
+        analysis: data.analysis,
+      }),
+    });
 
-    const newCase: CaseItem = {
-      fileName: file.name,
-      description,
-      analysis: data.analysis,
-      date: new Date().toISOString(),
-    };
+    const uploadData = await uploadRes.json();
+    if (!uploadData.success) return alert("Case upload failed");
 
-    setCaseHistory([newCase, ...caseHistory]);
+    // Fetch updated case list
+    const historyRes = await fetch("/api/case/assigned", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: user._id,
+        role: "client",
+      }),
+    });
+    const historyData = await historyRes.json();
+    if (historyRes.ok) {
+      setCaseHistory(historyData.cases);
+    }
+
     setAiResult(data.analysis);
     setFile(null);
-    setDescription('');
+    setDescription("");
   };
 
   const tabs: { id: TabId; label: string }[] = [
-    { id: 'profile', label: 'Profile' },
-    { id: 'upload', label: 'AI Case Upload' },
-    { id: 'history', label: 'Report History' },
-    { id: 'connect', label: 'Connect with Lawyer/Intern' },
+    { id: "profile", label: "Profile" },
+    { id: "upload", label: "AI Case Upload" },
+    { id: "history", label: "Report History" },
+    { id: "connect", label: "Connect with Lawyer/Intern" },
   ];
 
   const getInitials = (name?: string) => {
-    if (!name) return 'U';
+    if (!name) return "U";
     return name
-      .split(' ')
+      .split(" ")
       .map((n) => n[0])
-      .join('')
+      .join("")
       .toUpperCase();
   };
 
@@ -112,7 +145,8 @@ export default function ClientDashboardPage() {
               {getInitials(user.name)}
             </div>
             <p className="text-gray-700 text-sm">
-              Welcome back, <span className="font-medium text-indigo-700">{user.name}</span>
+              Welcome back,{" "}
+              <span className="font-medium text-indigo-700">{user.name}</span>
             </p>
           </div>
         )}
@@ -124,14 +158,14 @@ export default function ClientDashboardPage() {
           <button
             key={tab.id}
             onClick={() =>
-              tab.id === 'connect'
-                ? router.push('/Dashboard/client/lawyers')
+              tab.id === "connect"
+                ? router.push("/Dashboard/client/lawyers")
                 : setActiveTab(tab.id)
             }
             className={`px-4 py-2 rounded-md font-medium ${
               activeTab === tab.id
-                ? 'bg-indigo-600 text-white'
-                : 'bg-white text-gray-700 border border-gray-300'
+                ? "bg-indigo-600 text-white"
+                : "bg-white text-gray-700 border border-gray-300"
             }`}
           >
             {tab.label}
@@ -141,7 +175,7 @@ export default function ClientDashboardPage() {
 
       {/* Content Area */}
       <div className="max-w-5xl mx-auto p-6">
-        {activeTab === 'profile' && (
+        {activeTab === "profile" && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -149,18 +183,18 @@ export default function ClientDashboardPage() {
           >
             <h2 className="text-xl font-semibold mb-4">Your Profile</h2>
             <p>
-              <strong>Name:</strong> {user?.name || 'N/A'}
+              <strong>Name:</strong> {user?.name || "N/A"}
             </p>
             <p>
               <strong>Role:</strong> Client
             </p>
             <p>
-              <strong>Email:</strong> {user?.email || 'Not provided'}
+              <strong>Email:</strong> {user?.email || "Not provided"}
             </p>
           </motion.div>
         )}
 
-        {activeTab === 'upload' && (
+        {activeTab === "upload" && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -195,7 +229,7 @@ export default function ClientDashboardPage() {
           </motion.div>
         )}
 
-        {activeTab === 'history' && (
+        {activeTab === "history" && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -209,20 +243,62 @@ export default function ClientDashboardPage() {
                   <th className="p-2">File</th>
                   <th className="p-2">Description</th>
                   <th className="p-2">AI Solution</th>
+                  <th className="p-2 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {caseHistory.map((item, index) => (
                   <tr key={index} className="border-t text-sm hover:bg-gray-50">
                     <td className="p-2 whitespace-nowrap">
-                      {new Date(item.date).toLocaleDateString()}
+                      {item.createdAt
+                        ? new Date(item.createdAt).toLocaleDateString()
+                        : "N/A"}
                     </td>
-                    <td className="p-2 whitespace-nowrap">{item.fileName || 'N/A'}</td>
-                    <td className="p-2">
-                      {item.description?.slice(0, 40) || 'N/A'}...
+                    <td className="p-2 whitespace-nowrap">
+                      {item.title || "N/A"}
                     </td>
                     <td className="p-2">
-                      {item.analysis?.slice(0, 50) || 'N/A'}...
+                      {item.description?.slice(0, 40) || "N/A"}...
+                    </td>
+                    <td
+                      className="p-2 text-indigo-600 underline cursor-pointer"
+                      onClick={() =>
+                        setExpandedIndex(expandedIndex === index ? null : index)
+                      }
+                    >
+                      {expandedIndex === index
+                        ? item.analysis
+                        : (item.analysis?.slice(0, 50) || "N/A") + "..."}
+                    </td>
+
+                    <td className="p-2 flex gap-3 justify-center">
+                      {item.documents?.[0] ? (
+                        <>
+                          <a
+                            href={`/uploads/${item.documents[0]}`}
+                            download
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Download
+                              size={16}
+                              className="text-blue-600 hover:text-blue-800"
+                            />
+                          </a>
+                          <a
+                            href={`/uploads/${item.documents[0]}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Eye
+                              size={16}
+                              className="text-green-600 hover:text-green-800"
+                            />
+                          </a>
+                        </>
+                      ) : (
+                        <span className="text-gray-400 text-xs">No file</span>
+                      )}
                     </td>
                   </tr>
                 ))}

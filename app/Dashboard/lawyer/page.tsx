@@ -16,13 +16,16 @@ import {
   Mail,
   Phone,
   Eye,
+  Gavel,
   Download,
   Filter,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
 type CaseItem = {
-  id: string;
+  documents: string;
+  downloadLink: string | undefined;
+  _id: string;
   fileName: string;
   description: string;
   aiSolution: string;
@@ -35,6 +38,7 @@ type CaseItem = {
 };
 
 type User = {
+  _id: string;
   role: string;
   name?: string;
   email?: string;
@@ -47,13 +51,13 @@ type User = {
 
 type TabId =
   | "profile"
+  | "openCases"
   | "cases"
   | "clients"
   | "analytics"
   | "calendar"
   | "messages";
 
- 
 const Input = ({
   label,
   value,
@@ -81,6 +85,8 @@ const LawyerDashboard = () => {
   const [activeTab, setActiveTab] = useState<TabId>("profile");
   const [user, setUser] = useState<User | null>(null);
   const [editUser, setEditUser] = useState<User>({
+    _id: "",
+    profileImage: "",
     role: "lawyer",
     name: "",
     email: "",
@@ -90,91 +96,37 @@ const LawyerDashboard = () => {
     barNumber: "",
   });
   useEffect(() => {
-  const fetchUserData = async () => {
-    if (!editUser?.email) return;
+    const fetchUserData = async () => {
+      if (!editUser?.email) return;
 
-    try {
-      const res = await fetch("/api/getProfile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: editUser.email }),
-      });
+      try {
+        const res = await fetch("/api/getProfile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: editUser.email }),
+        });
 
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data);
-        setEditUser(data); // keep both in sync
-      } else {
-        console.error("Failed to fetch profile");
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
+          setEditUser(data);
+        } else {
+          console.error("Failed to fetch profile");
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
       }
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-    }
-  };
+    };
 
-  fetchUserData();
-}, [editUser.email]);
+    fetchUserData();
+  }, [editUser.email]);
 
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [filterStatus, setFilterStatus] = useState<string>("all");
-  const [acceptedCases] = useState<CaseItem[]>([
-    {
-      id: "001",
-      fileName: "property_dispute.pdf",
-      description:
-        "Client facing property dispute with neighbor regarding boundary issues",
-      aiSolution:
-        "Applicable: Transfer of Property Act, 1882. Suggest mediation or civil suit under specific performance.",
-      date: "2025-06-21",
-      status: "in-progress",
-      clientName: "Rajesh Kumar",
-      priority: "high",
-      caseType: "Property Law",
-      estimatedHours: 25,
-    },
-    {
-      id: "002",
-      fileName: "contract_breach.pdf",
-      description:
-        "Business contract breach case - supplier failed to deliver goods as per agreement",
-      aiSolution:
-        "Indian Contract Act, 1872 - Section 73. Claim damages for breach of contract.",
-      date: "2025-06-18",
-      status: "pending",
-      clientName: "Priya Sharma",
-      priority: "medium",
-      caseType: "Contract Law",
-      estimatedHours: 15,
-    },
-    {
-      id: "003",
-      fileName: "employment_issue.pdf",
-      description:
-        "Wrongful termination case - employee dismissed without proper notice",
-      aiSolution:
-        "Industrial Disputes Act, 1947. File complaint with labour court for reinstatement.",
-      date: "2025-06-15",
-      status: "urgent",
-      clientName: "Amit Verma",
-      priority: "high",
-      caseType: "Employment Law",
-      estimatedHours: 20,
-    },
-    {
-      id: "004",
-      fileName: "divorce_proceedings.pdf",
-      description:
-        "Mutual consent divorce case with asset division and custody arrangements",
-      aiSolution:
-        "Hindu Marriage Act, 1955. Prepare mutual consent petition with settlement terms.",
-      date: "2025-06-10",
-      status: "completed",
-      clientName: "Sunita Devi",
-      priority: "low",
-      caseType: "Family Law",
-      estimatedHours: 30,
-    },
-  ]);
+  const [acceptedCases, setAcceptedCases] = useState<CaseItem[]>([]);
+  const [openCases, setOpenCases] = useState<CaseItem[]>([]);
+  const [selectedCase, setSelectedCase] = useState<CaseItem | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const checkAuthAndFetchUser = async () => {
@@ -196,6 +148,79 @@ const LawyerDashboard = () => {
 
     checkAuthAndFetchUser();
   }, [router]);
+
+  useEffect(() => {
+    const fetchCases = async () => {
+      if (!user?._id) return;
+
+      try {
+        // Fetch accepted cases
+        const assignedRes = await fetch("/api/case/assigned", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user._id,
+            role: "lawyer",
+          }),
+        });
+
+        const assignedData = await assignedRes.json();
+        if (assignedRes.ok) {
+          setAcceptedCases(assignedData.cases);
+        }
+
+        // Fetch open cases
+        const openRes = await fetch("/api/case/open");
+        const openData = await openRes.json();
+        if (openRes.ok && Array.isArray(openData.cases)) {
+          setOpenCases(openData.cases);
+        } else {
+          setOpenCases([]);
+        }
+      } catch (err) {
+        console.error("Error fetching cases:", err);
+      }
+    };
+
+    fetchCases();
+  }, [user]);
+  useEffect(() => {
+    if (!user) return;
+    setEditUser({
+      ...user,
+      profileImage: user.profileImage || "",
+    });
+  }, [user]);
+
+  const acceptCase = async (caseId: string) => {
+    try {
+      const res = await fetch("/api/case/accept", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          caseId: caseId,
+          lawyerId: user?._id,
+        }),
+      });
+
+      if (res.ok) {
+        const accepted = openCases.find((c) => c._id === caseId);
+        if (accepted) {
+          setAcceptedCases((prev) => [
+            ...prev,
+            { ...accepted, status: "in-progress" },
+          ]);
+          setOpenCases((prev) => prev.filter((c) => c._id !== caseId));
+
+          alert("Case accepted successfully!");
+        }
+      } else {
+        alert("Failed to accept case");
+      }
+    } catch (err) {
+      console.error("Error accepting case:", err);
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -231,6 +256,7 @@ const LawyerDashboard = () => {
 
   const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
     { id: "profile", label: "Profile", icon: <User size={18} /> },
+    { id: "openCases", label: "Open Cases", icon: <Gavel size={18} /> },
     { id: "cases", label: "Case Management", icon: <Scale size={18} /> },
     { id: "clients", label: "Client Directory", icon: <Users size={18} /> },
     { id: "analytics", label: "Analytics", icon: <TrendingUp size={18} /> },
@@ -275,30 +301,46 @@ const LawyerDashboard = () => {
     };
     reader.readAsDataURL(file);
   };
-
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const updatedData = {
+        ...editUser,
+        role: "lawyer",
+      };
+
       const res = await fetch("/api/updateProfile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editUser),
+        body: JSON.stringify(updatedData),
       });
 
       if (res.ok) {
         const updated = await res.json();
-        setUser(updated);
-        setEditUser(updated);
+        setUser(updated.updated); // updated.updated = actual user data from API
+        setEditUser(updated.updated);
         setShowEditModal(false);
         alert("Profile updated successfully!");
       } else {
-        alert("Update failed");
+        const error = await res.json();
+        console.error("Update failed:", error);
+        alert("Update failed: " + error.error);
       }
     } catch (err) {
       console.error("Error updating profile:", err);
       alert("Something went wrong.");
     }
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function setModalType(_arg0: string) {
+    throw new Error("Function not implemented.");
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function handleAcceptCase(_id: string): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -471,6 +513,91 @@ const LawyerDashboard = () => {
             </motion.div>
           )}
 
+          {/* Open Cases Tab */}
+          {activeTab === "openCases" && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-white p-6 rounded-xl shadow-lg"
+            >
+              <h2 className="text-xl font-semibold mb-4">
+                Available Open Cases
+              </h2>
+              {Array.isArray(openCases) && openCases.length > 0 ? (
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-gray-200 text-sm">
+                      <th className="p-2">Case ID</th>
+                      <th className="p-2">Title</th>
+                      <th className="p-2">Description</th>
+                      <th className="p-2">Date</th>
+                      <th className="p-2">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {openCases.map((caseItem) => (
+                      <tr
+                        key={caseItem._id}
+                        className="border-t text-sm hover:bg-gray-50"
+                      >
+                        <td className="p-2 whitespace-nowrap">
+                          {new Date(caseItem.date).toLocaleDateString()}
+                        </td>
+                        <td className="p-2 whitespace-nowrap">
+                          {caseItem.fileName}
+                        </td>
+                        <td className="p-2">
+                          {caseItem.description?.slice(0, 40)}...
+                        </td>
+                        <td className="p-2">
+                          <a
+                            href={`/uploads/${caseItem.documents?.[0]}`}
+                            download
+                            className="text-blue-600 underline"
+                          >
+                            Download
+                          </a>
+                        </td>
+                        <td className="p-2 flex flex-col gap-1">
+                          <button
+                            onClick={() => {
+                              setSelectedCase(caseItem);
+                              setModalType("view");
+                              setShowModal(true);
+                            }}
+                            className="bg-blue-100 text-blue-800 px-2 py-1 rounded hover:bg-blue-200 text-xs"
+                          >
+                            View Case
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedCase(caseItem);
+                              setModalType("ai");
+                              setShowModal(true);
+                            }}
+                            className="bg-purple-100 text-purple-800 px-2 py-1 rounded hover:bg-purple-200 text-xs"
+                          >
+                            View AI Summary
+                          </button>
+                          <button
+                            onClick={() => handleAcceptCase(caseItem._id)}
+                            className="bg-green-100 text-green-800 px-2 py-1 rounded hover:bg-green-200 text-xs"
+                          >
+                            Accept Case
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="text-gray-600">
+                  No open cases available right now.
+                </p>
+              )}
+            </motion.div>
+          )}
+
           {/* Cases Tab */}
           {activeTab === "cases" && (
             <motion.div
@@ -530,9 +657,9 @@ const LawyerDashboard = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {filteredCases.map((caseItem) => (
-                      <tr key={caseItem.id} className="hover:bg-gray-50">
+                      <tr key={caseItem._id} className="hover:bg-gray-50">
                         <td className="px-4 py-3 font-medium text-indigo-600">
-                          #{caseItem.id}
+                          #{caseItem._id}
                         </td>
                         <td className="px-4 py-3">{caseItem.clientName}</td>
                         <td className="px-4 py-3">
@@ -568,12 +695,22 @@ const LawyerDashboard = () => {
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex space-x-2">
-                            <button className="text-indigo-600 hover:text-indigo-800">
+                            <button
+                              className="text-indigo-600 hover:text-indigo-800"
+                              onClick={() => {
+                                setSelectedCase(caseItem);
+                                setShowModal(true);
+                              }}
+                            >
                               <Eye size={16} />
                             </button>
-                            <button className="text-gray-600 hover:text-gray-800">
+                            <a
+                              href={caseItem.downloadLink}
+                              className="text-gray-600 hover:text-gray-800"
+                              download
+                            >
                               <Download size={16} />
-                            </button>
+                            </a>
                           </div>
                         </td>
                       </tr>
@@ -581,6 +718,38 @@ const LawyerDashboard = () => {
                   </tbody>
                 </table>
               </div>
+              {Array.isArray(openCases) && openCases.length > 0 && (
+                <div className="mt-8">
+                  <h3 className="text-lg font-semibold mb-4">Open Cases</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {openCases.map((c) => (
+                      <div
+                        key={c._id}
+                        className="bg-white p-4 rounded shadow border border-gray-200"
+                      >
+                        <p className="text-sm text-gray-600 mb-1">
+                          <strong>Client:</strong> {c.clientName}
+                        </p>
+                        <p className="text-sm text-gray-600 mb-1">
+                          <strong>Description:</strong> {c.description}
+                        </p>
+                        <p className="text-sm text-gray-600 mb-1">
+                          <strong>Status:</strong> {c.status}
+                        </p>
+                        <p className="text-sm text-gray-600 mb-3">
+                          <strong>Date:</strong> {c.date}
+                        </p>
+                        <button
+                          onClick={() => acceptCase(c._id)}
+                          className="text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 text-sm rounded"
+                        >
+                          Accept Case
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </motion.div>
           )}
 
@@ -730,7 +899,6 @@ const LawyerDashboard = () => {
       {showEditModal && user && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 space-y-4 relative max-h-[90vh] overflow-y-auto">
-
             <button
               onClick={() => setShowEditModal(false)}
               className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-lg"
@@ -814,6 +982,60 @@ const LawyerDashboard = () => {
                 Save Changes
               </button>
             </form>
+          </div>
+        </div>
+      )}
+      {showModal && selectedCase && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full p-6 relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl"
+            >
+              ✖
+            </button>
+            <h2 className="text-lg font-semibold mb-4">Case Details</h2>
+            <p>
+              <strong>ID:</strong> #{selectedCase._id}
+            </p>
+            <p>
+              <strong>Client:</strong> {selectedCase.clientName}
+            </p>
+            <p>
+              <strong>Type:</strong> {selectedCase.caseType}
+            </p>
+            <p>
+              <strong>Description:</strong> {selectedCase.description}
+            </p>
+            <p>
+              <strong>Status:</strong> {selectedCase.status}
+            </p>
+            <p>
+              <strong>Priority:</strong> {selectedCase.priority}
+            </p>
+            <p>
+              <strong>Date:</strong> {selectedCase.date}
+            </p>
+            <hr className="my-4" />
+            <p className="whitespace-pre-wrap">
+              <strong>AI Analysis:</strong>
+              <br />
+              {selectedCase.aiSolution}
+            </p>
+          </div>
+        </div>
+      )}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-lg"
+            >
+              ✖
+            </button>
+            <h2 className="text-xl font-semibold mb-4">New Case</h2>
+            {/* Form for creating a new case can go here */}
           </div>
         </div>
       )}

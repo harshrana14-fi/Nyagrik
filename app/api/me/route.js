@@ -22,11 +22,11 @@ export async function GET(req) {
     }
 
     return NextResponse.json({
-      userId: decoded.userId,
-      role: decoded.role,
-      name: user.fullName || 'N/A',
-      email: user.email || 'Not provided',
-    });
+  _id: decoded.userId, 
+  role: decoded.role,
+  name: user.fullName || 'N/A',
+  email: user.email || 'Not provided',
+});
   } catch (err) {
     console.error('[JWT VERIFY ERROR]', err);
     return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
