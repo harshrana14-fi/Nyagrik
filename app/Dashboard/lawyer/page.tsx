@@ -21,6 +21,7 @@ import {
   Filter,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import ChatList from "@/app/components/ChatList";
 
 type CaseItem = {
   documents: string;
@@ -887,13 +888,9 @@ const LawyerDashboard = () => {
               className="p-6"
             >
               <h2 className="text-xl font-semibold mb-6">Client Messages</h2>
-              <div className="text-center py-12">
-                <MessageSquare
-                  className="mx-auto text-gray-400 mb-4"
-                  size={48}
-                />
-                <p className="text-gray-600">Messaging system coming soon</p>
-              </div>
+
+              {/* Chat list */}
+              <ChatList/>
             </motion.div>
           )}
         </div>
@@ -989,7 +986,7 @@ const LawyerDashboard = () => {
       )}
       {showModal && selectedCase && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-         <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative">
+          <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative">
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl"

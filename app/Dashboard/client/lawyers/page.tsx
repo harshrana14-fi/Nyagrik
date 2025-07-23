@@ -16,6 +16,7 @@ import {
   Calendar,
   CheckCircle,
 } from "lucide-react";
+import Image from "next/image";
 
 interface Lawyer {
   id: string;
@@ -86,6 +87,18 @@ export default function LawyersPage() {
 
     fetchLawyers();
   }, []);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const res = await fetch("/api/me");
+      const data = await res.json();
+      console.log("Fetched clientId:", data);
+      setClientId(data._id);
+    };
+
+    fetchUserId();
+  }, []);
+  const [clientId, setClientId] = useState<string | null>(null);
 
   const filteredLawyers = lawyers
     .filter((lawyer) => {
@@ -294,9 +307,20 @@ export default function LawyersPage() {
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                    {lawyer.name.split(" ")[1]?.[0] || "L"}
-                  </div>
+                  {lawyer.image ? (
+                    <Image
+                      src={lawyer.image}
+                      alt={lawyer.name}
+                      width={64}
+                      height={64}
+                      className="rounded-full object-cover border border-indigo-300"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      {lawyer.name.split(" ")[1]?.[0] || "L"}
+                    </div>
+                  )}
+
                   <div className="flex flex-col items-end">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${getAvailabilityColor(
@@ -375,9 +399,41 @@ export default function LawyersPage() {
                     Connect Now
                   </button>
                   <button
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       e.stopPropagation();
-                      // Handle chat action
+
+                      if (!clientId) {
+                        console.error("No clientId available");
+                        return;
+                      }
+
+                      try {
+                        const res = await fetch("/api/chat/start", {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            clientId,
+                            lawyerId: lawyer.id,
+                          }),
+                        });
+
+                        if (!res.ok) {
+                          const err = await res.json();
+                          console.error("Chat start failed:", err);
+                          return;
+                        }
+
+                        const data = await res.json();
+                        console.log(
+                          "Chat created, redirecting to",
+                          data.chatId
+                        );
+                        window.location.href = `/chat/${data.chatId}`;
+                      } catch (err) {
+                        console.error("Chat error:", err);
+                      }
                     }}
                     className="p-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition"
                   >
@@ -411,9 +467,20 @@ export default function LawyersPage() {
             <div className="p-6">
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-2xl">
-                    {selectedLawyer.name.split(" ")[1]?.[0] || "L"}
-                  </div>
+                  {selectedLawyer.image ? (
+                    <Image
+                      src={selectedLawyer.image}
+                      alt={selectedLawyer.name}
+                      width={80}
+                      height={80}
+                      className="rounded-full object-cover border border-indigo-300"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-2xl">
+                      {selectedLawyer.name.split(" ")[1]?.[0] || "L"}
+                    </div>
+                  )}
+
                   <div>
                     <h2 className="text-3xl font-bold text-gray-800">
                       {selectedLawyer.name}
