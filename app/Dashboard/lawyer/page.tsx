@@ -127,6 +127,8 @@ const LawyerDashboard = () => {
   const [openCases, setOpenCases] = useState<CaseItem[]>([]);
   const [selectedCase, setSelectedCase] = useState<CaseItem | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState<"view" | "ai" | null>(null);
+
 
   useEffect(() => {
     const checkAuthAndFetchUser = async () => {
@@ -317,7 +319,7 @@ const LawyerDashboard = () => {
 
       if (res.ok) {
         const updated = await res.json();
-        setUser(updated.updated); // updated.updated = actual user data from API
+        setUser(updated.updated); 
         setEditUser(updated.updated);
         setShowEditModal(false);
         alert("Profile updated successfully!");
@@ -332,15 +334,6 @@ const LawyerDashboard = () => {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function setModalType(_arg0: string) {
-    throw new Error("Function not implemented.");
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function handleAcceptCase(_id: string): void {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -580,7 +573,7 @@ const LawyerDashboard = () => {
                             View AI Summary
                           </button>
                           <button
-                            onClick={() => handleAcceptCase(caseItem._id)}
+                            onClick={() => acceptCase(caseItem._id)}
                             className="bg-green-100 text-green-800 px-2 py-1 rounded hover:bg-green-200 text-xs"
                           >
                             Accept Case
@@ -985,60 +978,39 @@ const LawyerDashboard = () => {
           </div>
         </div>
       )}
-      {showModal && selectedCase && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full p-6 relative">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl"
-            >
-              ✖
-            </button>
-            <h2 className="text-lg font-semibold mb-4">Case Details</h2>
-            <p>
-              <strong>ID:</strong> #{selectedCase._id}
-            </p>
-            <p>
-              <strong>Client:</strong> {selectedCase.clientName}
-            </p>
-            <p>
-              <strong>Type:</strong> {selectedCase.caseType}
-            </p>
-            <p>
-              <strong>Description:</strong> {selectedCase.description}
-            </p>
-            <p>
-              <strong>Status:</strong> {selectedCase.status}
-            </p>
-            <p>
-              <strong>Priority:</strong> {selectedCase.priority}
-            </p>
-            <p>
-              <strong>Date:</strong> {selectedCase.date}
-            </p>
-            <hr className="my-4" />
-            <p className="whitespace-pre-wrap">
-              <strong>AI Analysis:</strong>
-              <br />
-              {selectedCase.aiSolution}
-            </p>
-          </div>
-        </div>
+     {showModal && selectedCase && (
+  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full p-6 relative">
+      <button
+        onClick={() => setShowModal(false)}
+        className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl"
+      >
+        ✖
+      </button>
+      {modalType === "view" && (
+        <>
+          <h2 className="text-lg font-semibold mb-4">Case Details</h2>
+          <p><strong>ID:</strong> #{selectedCase._id}</p>
+          <p><strong>Client:</strong> {selectedCase.clientName}</p>
+          <p><strong>Type:</strong> {selectedCase.caseType}</p>
+          <p><strong>Description:</strong> {selectedCase.description}</p>
+          <p><strong>Status:</strong> {selectedCase.status}</p>
+          <p><strong>Priority:</strong> {selectedCase.priority}</p>
+          <p><strong>Date:</strong> {selectedCase.date}</p>
+        </>
       )}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-lg"
-            >
-              ✖
-            </button>
-            <h2 className="text-xl font-semibold mb-4">New Case</h2>
-            {/* Form for creating a new case can go here */}
-          </div>
-        </div>
+      {modalType === "ai" && (
+        <>
+          <h2 className="text-lg font-semibold mb-4">AI Summary</h2>
+          <p className="whitespace-pre-wrap">{selectedCase.aiSolution}</p>
+        </>
       )}
+    </div>
+  </div>
+)}
+
+
+
     </div>
   );
 };
