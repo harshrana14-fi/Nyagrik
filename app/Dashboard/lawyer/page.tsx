@@ -129,7 +129,6 @@ const LawyerDashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<"view" | "ai" | null>(null);
 
-
   useEffect(() => {
     const checkAuthAndFetchUser = async () => {
       try {
@@ -168,14 +167,24 @@ const LawyerDashboard = () => {
 
         const assignedData = await assignedRes.json();
         if (assignedRes.ok) {
-          setAcceptedCases(assignedData.cases);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const normalizedCases = assignedData.cases.map((caseItem: any) => ({
+            ...caseItem,
+            aiSolution: caseItem.aiSolution || caseItem.analysis || "",
+          }));
+          setAcceptedCases(normalizedCases);
         }
 
         // Fetch open cases
         const openRes = await fetch("/api/case/open");
         const openData = await openRes.json();
         if (openRes.ok && Array.isArray(openData.cases)) {
-          setOpenCases(openData.cases);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const normalizedOpenCases = openData.cases.map((caseItem: any) => ({
+            ...caseItem,
+            aiSolution: caseItem.aiSolution || caseItem.analysis || "",
+          }));
+          setOpenCases(normalizedOpenCases);
         } else {
           setOpenCases([]);
         }
@@ -319,7 +328,7 @@ const LawyerDashboard = () => {
 
       if (res.ok) {
         const updated = await res.json();
-        setUser(updated.updated); 
+        setUser(updated.updated);
         setEditUser(updated.updated);
         setShowEditModal(false);
         alert("Profile updated successfully!");
@@ -333,7 +342,6 @@ const LawyerDashboard = () => {
       alert("Something went wrong.");
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -523,7 +531,7 @@ const LawyerDashboard = () => {
                       <th className="p-2">Case ID</th>
                       <th className="p-2">Title</th>
                       <th className="p-2">Description</th>
-                      <th className="p-2">Date</th>
+                      <th className="p-2">Case File</th>
                       <th className="p-2">Actions</th>
                     </tr>
                   </thead>
@@ -533,9 +541,10 @@ const LawyerDashboard = () => {
                         key={caseItem._id}
                         className="border-t text-sm hover:bg-gray-50"
                       >
-                        <td className="p-2 whitespace-nowrap">
-                          {new Date(caseItem.date).toLocaleDateString()}
+                        <td className="p-2 font-medium text-indigo-600">
+                          #{caseItem._id}
                         </td>
+
                         <td className="p-2 whitespace-nowrap">
                           {caseItem.fileName}
                         </td>
@@ -978,39 +987,50 @@ const LawyerDashboard = () => {
           </div>
         </div>
       )}
-     {showModal && selectedCase && (
-  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full p-6 relative">
-      <button
-        onClick={() => setShowModal(false)}
-        className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl"
-      >
-        ✖
-      </button>
-      {modalType === "view" && (
-        <>
-          <h2 className="text-lg font-semibold mb-4">Case Details</h2>
-          <p><strong>ID:</strong> #{selectedCase._id}</p>
-          <p><strong>Client:</strong> {selectedCase.clientName}</p>
-          <p><strong>Type:</strong> {selectedCase.caseType}</p>
-          <p><strong>Description:</strong> {selectedCase.description}</p>
-          <p><strong>Status:</strong> {selectedCase.status}</p>
-          <p><strong>Priority:</strong> {selectedCase.priority}</p>
-          <p><strong>Date:</strong> {selectedCase.date}</p>
-        </>
+      {showModal && selectedCase && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+         <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl"
+            >
+              ✖
+            </button>
+            {modalType === "view" && (
+              <>
+                <h2 className="text-lg font-semibold mb-4">Case Details</h2>
+                <p>
+                  <strong>ID:</strong> #{selectedCase._id}
+                </p>
+                <p>
+                  <strong>Client:</strong> {selectedCase.clientName}
+                </p>
+                <p>
+                  <strong>Type:</strong> {selectedCase.caseType}
+                </p>
+                <p>
+                  <strong>Description:</strong> {selectedCase.description}
+                </p>
+                <p>
+                  <strong>Status:</strong> {selectedCase.status}
+                </p>
+                <p>
+                  <strong>Priority:</strong> {selectedCase.priority}
+                </p>
+                <p>
+                  <strong>Date:</strong> {selectedCase.date}
+                </p>
+              </>
+            )}
+            {modalType === "ai" && (
+              <>
+                <h2 className="text-lg font-semibold mb-4">AI Summary</h2>
+                <p className="whitespace-pre-wrap">{selectedCase.aiSolution}</p>
+              </>
+            )}
+          </div>
+        </div>
       )}
-      {modalType === "ai" && (
-        <>
-          <h2 className="text-lg font-semibold mb-4">AI Summary</h2>
-          <p className="whitespace-pre-wrap">{selectedCase.aiSolution}</p>
-        </>
-      )}
-    </div>
-  </div>
-)}
-
-
-
     </div>
   );
 };
