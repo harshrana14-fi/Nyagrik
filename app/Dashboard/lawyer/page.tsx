@@ -2,24 +2,7 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Scale,
-  FileText,
-  Users,
-  Calendar,
-  MessageSquare,
-  TrendingUp,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  User,
-  Mail,
-  Phone,
-  Eye,
-  Gavel,
-  Download,
-  Filter,
-} from "lucide-react";
+import {Scale,FileText,Users,Calendar,MessageSquare,TrendingUp,Clock,CheckCircle,AlertCircle,User,Mail,Phone,Eye,Gavel,Download,Filter,} from "lucide-react";
 import { motion } from "framer-motion";
 
 type CaseItem = {

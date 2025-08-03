@@ -11,7 +11,7 @@ const teamMembers = [
     role: 'Founder',
     image: '/suteekshn.jpeg',
     description:
-      'Suteekshn brings visionary leadership to Nyagrik. With deep insight into India’s legal system, he founded Nyagrik to simplify justice through technology and expand legal access across all regions.',
+      'With a strong foundation in technology and business, Suteekshn is the visionary behind Nyagrik. He conceptualized the idea to simplify and democratize legal services, making them more approachable, understandable, and accessible to all. His strategic mindset, clarity of purpose, and hands-on leadership continue to guide the team toward building meaningful, tech-enabled legal solutions.',
     linkedin: 'https://www.linkedin.com/in/suteekshn-manchanda-936b16330/',
   },
   {
@@ -19,7 +19,7 @@ const teamMembers = [
     role: 'Co-Founder',
     image: '/shubham.jpeg',
     description:
-      'With a background in business and law, Shubham plays a key role in strategy and partnerships. He ensures Nyagrik aligns with real-world legal needs while remaining innovative and scalable.',
+      'Shubham plays a dynamic role in Nyagrik’s growth. As the co-founder, he assists in shaping the company’s strategic direction and operations. He supports in Nyagrik’s tech stack  by collaborating on development workflows and leads the implementation of AI-driven tools within the platform. With a focus on scalable impact and meaningful partnerships, Shubham ensures Nyaygrik stays innovative and people-centric.',
     linkedin: 'https://www.linkedin.com/in/shubham-solanki-902331321/',
   },
   {
@@ -27,7 +27,7 @@ const teamMembers = [
     role: 'Chief Technical Officer (CTO)',
     image: '/.jpeg',
     description:
-      'Harsh leads Nyagrik’s technology stack. He architects solutions that ensure performance, reliability, and user-centricity. His vision combines legal-tech innovation with top-tier engineering, turning complex legal processes into seamless digital experiences.',
+      'Harsh is the driving force behind Nyagrik’s infrastructure, leading the development of both frontend and backend systems. He is responsible for translating complex legal workflows into streamlined digital experiences through scalable, secure, and user-centric solutions. With a strong foundation in full-stack development, Harsh ensures the platform remains reliable, innovative, and aligned with the company’s long-term vision.',
     linkedin: 'https://www.linkedin.com/in/harsh-rana-17208634a/',
   
   },
@@ -36,7 +36,7 @@ const teamMembers = [
     role: 'Chief Operating Officer (COO)',
     image: '/krishvish.jpg',
     description:
-      'Krish is the backbone of Nyagrik’s daily operations. He ensures smooth client-lawyer coordination, legal service workflows, and efficient implementation of new features.',
+      'Krish ensures Nyagrik runs like a well-oiled machine. He oversees daily operations, manages internal coordination, and ensures seamless communication across stakeholders. Leveraging his strong network and interpersonal skills, Krish played a key role in crafting the revenue model and driving user acquisition strategies. His operational insight and collaborative spirit help translate vision into real-world execution.',
     linkedin: 'https://www.linkedin.com/in/krish-vishwakarma-46481527a/',
   },
 ];
