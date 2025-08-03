@@ -11,7 +11,7 @@ const teamMembers = [
     role: 'Founder',
     image: '/suteekshn.jpeg',
     description:
-      'With a strong foundation in technology and business, Suteekshn is the visionary behind Nyagrik. He conceptualized the idea to simplify and democratize legal services, making them more approachable, understandable, and accessible to all. His strategic mindset, clarity of purpose, and hands-on leadership continue to guide the team toward building meaningful, tech-enabled legal solutions.',
+      'With a solid foundation in both technology and business, Suteekshn is the visionary force behind Nyagrik. He conceptualized the platform to simplify and democratize legal services, aiming to make them more approachable and accessible for all. His strategic mindset, clarity of vision, and active leadership continue to guide the team in building impactful, tech-enabled legal solutions.',
     linkedin: 'https://www.linkedin.com/in/suteekshn-manchanda-936b16330/',
   },
   {
@@ -19,27 +19,27 @@ const teamMembers = [
     role: 'Co-Founder',
     image: '/shubham.jpeg',
     description:
-      'Shubham plays a dynamic role in Nyagrik’s growth. As the co-founder, he assists in shaping the company’s strategic direction and operations. He supports in Nyagrik’s tech stack  by collaborating on development workflows and leads the implementation of AI-driven tools within the platform. With a focus on scalable impact and meaningful partnerships, Shubham ensures Nyaygrik stays innovative and people-centric.',
+      'Shubham plays a key role in shaping Nyagrik’s overall strategy and technological progress. As Co-Founder, he contributes to development workflows, ensures smooth tech operations, and leads the integration of AI-driven tools. His focus on scalable impact and innovation helps maintain Nyagrik’s user-first approach and long-term growth.',
     linkedin: 'https://www.linkedin.com/in/shubham-solanki-902331321/',
   },
   {
     name: 'Harsh Rana',
     role: 'Chief Technical Officer (CTO)',
-    image: '/.jpeg',
+    image: '/harsh4.jpg',
     description:
-      'Harsh is the driving force behind Nyagrik’s infrastructure, leading the development of both frontend and backend systems. He is responsible for translating complex legal workflows into streamlined digital experiences through scalable, secure, and user-centric solutions. With a strong foundation in full-stack development, Harsh ensures the platform remains reliable, innovative, and aligned with the company’s long-term vision.',
+      'Harsh is the driving force behind Nyagrik’s infrastructure, leading both frontend and backend systems with a full-stack approach. He is instrumental in translating complex legal workflows into secure, scalable, and user-centric digital experiences. His strong technical foundation and product thinking ensure the platform stays innovative and aligned with the company’s mission.',
     linkedin: 'https://www.linkedin.com/in/harsh-rana-17208634a/',
-  
   },
   {
     name: 'Krish Vishwakarma',
     role: 'Chief Operating Officer (COO)',
     image: '/krishvish.jpg',
     description:
-      'Krish ensures Nyagrik runs like a well-oiled machine. He oversees daily operations, manages internal coordination, and ensures seamless communication across stakeholders. Leveraging his strong network and interpersonal skills, Krish played a key role in crafting the revenue model and driving user acquisition strategies. His operational insight and collaborative spirit help translate vision into real-world execution.',
+      'Krish ensures the seamless execution of day-to-day operations at Nyagrik. He oversees internal coordination, manages team communication, and plays a crucial role in revenue modeling and user acquisition. With strong interpersonal skills and operational insight, Krish helps convert strategic ideas into actionable outcomes.',
     linkedin: 'https://www.linkedin.com/in/krish-vishwakarma-46481527a/',
   },
 ];
+
 
 const PeoplePage = () => {
   return (
