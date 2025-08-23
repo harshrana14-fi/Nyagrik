@@ -25,7 +25,7 @@ const teamMembers = [
   {
     name: 'Harsh Rana',
     role: 'Chief Technical Officer (CTO)',
-    image: '/harsh1.jpg',
+    image: '/harxximg1.jpg',
     description:
       'Harsh is the driving force behind Nyagrik’s infrastructure, leading both frontend and backend systems with a full-stack approach. He is instrumental in translating complex legal workflows into secure, scalable, and user-centric digital experiences. His strong technical foundation and product thinking ensure the platform stays innovative and aligned with the company’s mission.',
     linkedin: 'https://www.linkedin.com/in/harsh-rana-17208634a/',
