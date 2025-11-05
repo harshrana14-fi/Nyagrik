@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import {Scale,FileText,Users,Calendar,MessageSquare,TrendingUp,Clock,CheckCircle,AlertCircle,User,Mail,Phone,Eye,Gavel,Download,Filter,} from "lucide-react";
+import {Scale,FileText,Users,Calendar,MessageSquare,TrendingUp,Clock,CheckCircle,AlertCircle,User,Mail,Phone,Eye,Gavel,Download,Filter,LogOut,Home,} from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 type CaseItem = {
   documents: string;
@@ -63,6 +64,26 @@ const Input = ({
   </div>
 );
 
+const ReadOnlyInput = ({
+  label,
+  value,
+}: {
+  label: string;
+  value?: string;
+}) => (
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      {label}
+    </label>
+    <input
+      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+      value={value || ""}
+      readOnly
+      disabled
+    />
+  </div>
+);
+
 const LawyerDashboard = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabId>("profile");
@@ -105,6 +126,8 @@ const LawyerDashboard = () => {
   }, [editUser.email]);
 
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [acceptedCases, setAcceptedCases] = useState<CaseItem[]>([]);
   const [openCases, setOpenCases] = useState<CaseItem[]>([]);
@@ -298,9 +321,16 @@ const LawyerDashboard = () => {
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Include email for API query (required), but only send editable fields for update
       const updatedData = {
-        ...editUser,
+        _id: editUser._id,
+        email: editUser.email, // Required for API to find the user
         role: "lawyer",
+        name: editUser.name,
+        profileImage: editUser.profileImage,
+        specialization: editUser.specialization,
+        experience: editUser.experience,
+        barNumber: editUser.barNumber,
       };
 
       const res = await fetch("/api/updateProfile", {
@@ -314,6 +344,7 @@ const LawyerDashboard = () => {
         setUser(updated.updated);
         setEditUser(updated.updated);
         setShowEditModal(false);
+        setShowDropdown(false);
         alert("Profile updated successfully!");
       } else {
         const error = await res.json();
@@ -326,49 +357,122 @@ const LawyerDashboard = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("/api/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        router.push("/login");
+      } else {
+        alert("Logout failed. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error logging out:", err);
+      alert("Something went wrong during logout.");
+    }
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Navbar */}
-      <nav className="bg-white shadow flex items-center justify-between px-6 py-4">
-        <div className="flex items-center space-x-3">
-          <Scale className="text-indigo-600" size={28} />
-          <h1 className="text-2xl font-bold text-indigo-600">
-            Lawyer Dashboard
-          </h1>
-        </div>
-        {user && (
-          <div className="flex items-center space-x-4">
-            <div className="text-right">
-              <p className="text-gray-600 font-medium">
-                Welcome back,{" "}
-                <span className="font-semibold text-indigo-700">
-                  {user.name}
-                </span>
-              </p>
-              <p className="text-xs text-gray-500">{user.specialization}</p>
-            </div>
-            <button
-              onClick={() => setShowEditModal(true)}
-              className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center hover:ring-2 ring-indigo-300 transition"
-            >
-              {user?.profileImage ? (
-                <Image
-                  src={user.profileImage}
-                  alt="Profile"
-                  width={40}
-                  height={40}
-                  className="rounded-full object-cover"
-                />
-              ) : (
-                <User className="text-indigo-600" size={20} />
-              )}
-            </button>
+      {/* Dashboard Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200 pt-4">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Scale className="text-indigo-600" size={28} />
+            <h1 className="text-2xl font-bold text-indigo-600">
+              Lawyer Dashboard
+            </h1>
           </div>
-        )}
-      </nav>
+          {user && (
+            <div className="flex items-center space-x-3 relative" ref={dropdownRef}>
+              <Link href="/" className="text-indigo-600 hover:text-indigo-800 transition" title="Go to Homepage">
+                <Home size={24} />
+              </Link>
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center hover:ring-2 ring-indigo-300 transition cursor-pointer"
+              >
+                {user?.profileImage ? (
+                  <Image
+                    src={user.profileImage}
+                    alt="Profile"
+                    width={40}
+                    height={40}
+                    className="rounded-full object-cover"
+                  />
+                ) : (
+                  <User className="text-indigo-600" size={20} />
+                )}
+              </button>
+
+              {/* Dropdown Menu */}
+              {showDropdown && (
+                <div className="absolute top-14 right-0 bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[180px] z-50">
+                  <button
+                    onClick={() => {
+                      setShowEditModal(true);
+                      setShowDropdown(false);
+                    }}
+                    className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition"
+                  >
+                    <User size={16} />
+                    Edit Profile
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      handleLogout();
+                    }}
+                    className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 flex items-center gap-2 transition"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Welcome Message */}
+      {user && (
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-6 py-2">
+            <p className="text-gray-600 font-medium">
+              Welcome back,{" "}
+              <span className="font-semibold text-indigo-700">
+                {user.name}
+              </span>
+              {user.specialization && (
+                <span className="text-xs text-gray-500 ml-2">
+                  • {user.specialization}
+                </span>
+              )}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Stats Cards */}
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      <div className="max-w-7xl mx-auto px-6 pt-2 pb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           {stats.map((stat, index) => (
             <motion.div
@@ -703,38 +807,6 @@ const LawyerDashboard = () => {
                   </tbody>
                 </table>
               </div>
-              {Array.isArray(openCases) && openCases.length > 0 && (
-                <div className="mt-8">
-                  <h3 className="text-lg font-semibold mb-4">Open Cases</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {openCases.map((c) => (
-                      <div
-                        key={c._id}
-                        className="bg-white p-4 rounded shadow border border-gray-200"
-                      >
-                        <p className="text-sm text-gray-600 mb-1">
-                          <strong>Client:</strong> {c.clientName}
-                        </p>
-                        <p className="text-sm text-gray-600 mb-1">
-                          <strong>Description:</strong> {c.description}
-                        </p>
-                        <p className="text-sm text-gray-600 mb-1">
-                          <strong>Status:</strong> {c.status}
-                        </p>
-                        <p className="text-sm text-gray-600 mb-3">
-                          <strong>Date:</strong> {c.date}
-                        </p>
-                        <button
-                          onClick={() => acceptCase(c._id)}
-                          className="text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 text-sm rounded"
-                        >
-                          Accept Case
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </motion.div>
           )}
 
@@ -921,20 +993,14 @@ const LawyerDashboard = () => {
                 }
               />
 
-              <Input
+              <ReadOnlyInput
                 label="Email"
                 value={editUser.email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEditUser({ ...editUser, email: e.target.value })
-                }
               />
 
-              <Input
+              <ReadOnlyInput
                 label="Phone"
                 value={editUser.phone}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEditUser({ ...editUser, phone: e.target.value })
-                }
               />
 
               <Input

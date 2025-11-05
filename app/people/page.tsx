@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FaLinkedin, } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const teamMembers = [
   {
@@ -43,7 +44,7 @@ const teamMembers = [
 
 const PeoplePage = () => {
   return (
-    <div className="bg-gray-50 text-gray-800">
+    <div className="bg-gray-50 text-gray-800 pt-16">
       <Navbar />
       {/* Hero */}
       <section className="relative h-[50vh] w-full">
@@ -105,6 +106,7 @@ const PeoplePage = () => {
           ))}
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

@@ -9,6 +9,8 @@ const Navbar = () => {
   const [navOpen, setNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -45,10 +47,38 @@ const Navbar = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/me", { credentials: "include" });
+        if (res.ok) {
+          const data = await res.json();
+          setIsLoggedIn(true);
+          setUserRole(data.role || null);
+        } else {
+          setIsLoggedIn(false);
+          setUserRole(null);
+        }
+      } catch (err) {
+        setIsLoggedIn(false);
+        setUserRole(null);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  const getDashboardPath = () => {
+    if (!userRole) return "/Dashboard/client";
+    if (userRole === "client") return "/Dashboard/client";
+    if (userRole === "lawyer") return "/Dashboard/lawyer";
+    if (userRole === "intern") return "/Dashboard/intern";
+    return "/Dashboard/client";
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/90 shadow-lg backdrop-blur-md" : "bg-transparent"
+        scrolled ? "bg-white/90 shadow-lg backdrop-blur-md" : "bg-white/95 backdrop-blur-sm"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
@@ -89,20 +119,31 @@ const Navbar = () => {
         </div>
 
         {/* Auth Buttons (Desktop) */}
-        <div className="hidden md:flex items-center space-x-4">
-          <Link
-            href="/login"
-            className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition"
-          >
-            Login
-          </Link>
-          <Link
-            href="/register"
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold hover:bg-indigo-700 transition"
-          >
-            Register
-          </Link>
-        </div>
+        {!isLoggedIn ? (
+          <div className="hidden md:flex items-center space-x-4">
+            <Link
+              href="/login"
+              className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition"
+            >
+              Login
+            </Link>
+            <Link
+              href="/register"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold hover:bg-indigo-700 transition"
+            >
+              Register
+            </Link>
+          </div>
+        ) : (
+          <div className="hidden md:flex items-center">
+            <Link
+              href={getDashboardPath()}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold hover:bg-indigo-700 transition"
+            >
+              Dashboard
+            </Link>
+          </div>
+        )}
 
         {/* Mobile Toggle */}
         <div className="md:hidden">
@@ -132,21 +173,36 @@ const Navbar = () => {
               {item.label}
             </a>
           ))}
-          <hr className="my-2 border-gray-200" />
-          <Link
-            href="/login"
-            onClick={() => setNavOpen(false)}
-            className="block text-indigo-600 hover:text-indigo-800 font-semibold"
-          >
-            Login
-          </Link>
-          <Link
-            href="/register"
-            onClick={() => setNavOpen(false)}
-            className="block bg-indigo-600 text-white text-center py-2 rounded-md font-semibold hover:bg-indigo-700"
-          >
-            Register
-          </Link>
+          {!isLoggedIn ? (
+            <>
+              <hr className="my-2 border-gray-200" />
+              <Link
+                href="/login"
+                onClick={() => setNavOpen(false)}
+                className="block text-indigo-600 hover:text-indigo-800 font-semibold"
+              >
+                Login
+              </Link>
+              <Link
+                href="/register"
+                onClick={() => setNavOpen(false)}
+                className="block bg-indigo-600 text-white text-center py-2 rounded-md font-semibold hover:bg-indigo-700"
+              >
+                Register
+              </Link>
+            </>
+          ) : (
+            <>
+              <hr className="my-2 border-gray-200" />
+              <Link
+                href={getDashboardPath()}
+                onClick={() => setNavOpen(false)}
+                className="block bg-indigo-600 text-white text-center py-2 rounded-md font-semibold hover:bg-indigo-700"
+              >
+                Dashboard
+              </Link>
+            </>
+          )}
         </div>
       )}
     </header>

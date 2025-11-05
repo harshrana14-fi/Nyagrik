@@ -31,7 +31,7 @@ const AvailableInternCases = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-8">
+    <div className="max-w-6xl mx-auto p-6 pt-8 space-y-8">
       <h1 className="text-2xl font-bold text-gray-800">Available Client Cases (Intern)</h1>
       <div className="bg-white shadow rounded-lg overflow-hidden">
         <table className="w-full text-sm text-left">

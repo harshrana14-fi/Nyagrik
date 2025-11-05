@@ -45,7 +45,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 flex items-center justify-center px-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold text-gray-800">Nyagrik Login</h1>
           <button
             onClick={() => router.push('/')}
@@ -58,8 +58,8 @@ const LoginPage = () => {
 
         {!role && (
           <>
-            <p className="text-gray-600 mb-6 text-sm">Select your role to continue login.</p>
-            <div className="grid grid-cols-1 gap-4">
+            <p className="text-gray-600 mb-4 text-sm">Select your role to continue login.</p>
+            <div className="grid grid-cols-1 gap-3">
               <button onClick={() => setRole('client')} className="btn-role">
                 <span className="font-medium">Client</span>
                 <FaUser />
@@ -78,10 +78,10 @@ const LoginPage = () => {
 
         {role && (
           <>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center capitalize">
+            <h2 className="text-xl font-semibold text-gray-800 mb-3 text-center capitalize">
               Login as {role === 'intern' ? 'Law Student / Intern' : role}
             </h2>
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-3">
               <input
                 type="email"
                 placeholder="Email"

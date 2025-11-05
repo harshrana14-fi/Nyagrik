@@ -163,28 +163,26 @@ export default function LawyersPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <div className="bg-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-800 flex items-center gap-3">
-                <Users className="text-indigo-600" size={40} />
-                Find Expert Lawyers
-              </h1>
-              <p className="text-gray-600 mt-2">
-                Connect with verified legal professionals across India
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-500">Trusted by</p>
-              <p className="text-2xl font-bold text-indigo-600">
-                10,000+ clients
-              </p>
-            </div>
-          </div>
+  <div className="bg-white shadow-lg">
+    <div className="max-w-7xl mx-auto px-4 py-3 mt-0 pt-0">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-4xl font-bold text-gray-800 flex items-center gap-3 pt-6">
+            <Users className="text-indigo-600" size={40} />
+            Find Expert Lawyers
+          </h1>
+          <p className="text-gray-600 mt-0 mb-0">
+            Connect with verified legal professionals across India
+          </p>
+        </div>
+        <div className="text-right">
+          <p className="text-sm text-gray-500">Trusted by</p>
+          <p className="text-2xl font-bold text-indigo-600">10,000+ clients</p>
         </div>
       </div>
+    </div>
+  </div>
+
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-6">

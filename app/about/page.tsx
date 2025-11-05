@@ -3,10 +3,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const AboutPage = () => {
   return (
-    <div className="bg-gray-50 text-gray-800">
+    <div className="bg-gray-50 text-gray-800 pt-16">
       <Navbar/>
       {/* Hero Section */}
       <section className="relative h-[60vh] w-full">
@@ -115,6 +116,7 @@ const AboutPage = () => {
           </motion.div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Scale, Users, Award, Shield, BookOpen, } from 'lucide-react';
+import { ChevronRight, Scale, Users, Award, Shield, BookOpen, Eye, Clock, Star, Phone, Building2, Gavel, FileText, Heart, Home, Calculator } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 
 const NyayWebsite = () => {
@@ -61,12 +62,12 @@ const NyayWebsite = () => {
   }, []);
 
   const services = [
-    { title: "Corporate Law", description: "Comprehensive corporate legal solutions for businesses of all sizes", icon: "🏢" },
-    { title: "Criminal Defense", description: "Expert criminal defense representation with proven track record", icon: "⚖️" },
-    { title: "Civil Litigation", description: "Strategic litigation services for complex civil matters", icon: "📋" },
-    { title: "Family Law", description: "Compassionate legal support for family-related legal issues", icon: "👨‍👩‍👧‍👦" },
-    { title: "Property Law", description: "Complete property and real estate legal services", icon: "🏠" },
-    { title: "Tax Consultation", description: "Expert tax advice and compliance solutions", icon: "💼" },
+    { title: "Corporate Law", description: "Comprehensive corporate legal solutions for businesses of all sizes", icon: Building2 },
+    { title: "Criminal Defense", description: "Expert criminal defense representation with proven track record", icon: Gavel },
+    { title: "Civil Litigation", description: "Strategic litigation services for complex civil matters", icon: FileText },
+    { title: "Family Law", description: "Compassionate legal support for family-related legal issues", icon: Heart },
+    { title: "Property Law", description: "Complete property and real estate legal services", icon: Home },
+    { title: "Tax Consultation", description: "Expert tax advice and compliance solutions", icon: Calculator },
   ];
 
   const expertise = [
@@ -79,7 +80,7 @@ const NyayWebsite = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-16">
       <Navbar/>
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
@@ -242,19 +243,24 @@ const NyayWebsite = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { title: "Transparency", desc: "Clear communication at every step", icon: "🔍" },
-              { title: "Reliability", desc: "Consistent and dependable service", icon: "⏰" },
-              { title: "Excellence", desc: "Highest quality legal representation", icon: "⭐" },
-              { title: "Accessibility", desc: "Always available when you need us", icon: "📞" }
-            ].map((commitment, index) => (
-              <div key={index} className="text-center group">
-                <div className="text-6xl mb-4 group-hover:scale-110 transition-transform">
-                  {commitment.icon}
+              { title: "Transparency", desc: "Clear communication at every step", icon: Eye },
+              { title: "Reliability", desc: "Consistent and dependable service", icon: Clock },
+              { title: "Excellence", desc: "Highest quality legal representation", icon: Star },
+              { title: "Accessibility", desc: "Always available when you need us", icon: Phone }
+            ].map((commitment, index) => {
+              const IconComponent = commitment.icon;
+              return (
+                <div key={index} className="text-center group">
+                  <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                      <IconComponent className="w-8 h-8 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{commitment.title}</h3>
+                  <p className="text-gray-600">{commitment.desc}</p>
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{commitment.title}</h3>
-                <p className="text-gray-600">{commitment.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -295,27 +301,33 @@ const NyayWebsite = () => {
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service, index) => (
-                <div
-                  key={index}
-                  className="group bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/40 hover:shadow-2xl hover:scale-105 transition-all duration-300"
-                >
-                  <div className="text-center">
-                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">
-                      {service.icon}
+              {services.map((service, index) => {
+                const IconComponent = service.icon;
+                return (
+                  <div
+                    key={index}
+                    className="group bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/40 hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                  >
+                    <div className="text-center">
+                      <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                          <IconComponent className="w-8 h-8 text-white" />
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800 mb-4">{service.title}</h3>
+                      <p className="text-gray-600 mb-6">{service.description}</p>
+                      <button className="text-indigo-600 font-semibold hover:text-indigo-800 transition-colors group-hover:underline">
+                        Learn More →
+                      </button>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">{service.title}</h3>
-                    <p className="text-gray-600 mb-6">{service.description}</p>
-                    <button className="text-indigo-600 font-semibold hover:text-indigo-800 transition-colors group-hover:underline">
-                      Learn More →
-                    </button>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

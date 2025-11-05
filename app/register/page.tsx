@@ -67,8 +67,8 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 flex items-center justify-center px-4">
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
-        <div className="flex justify-between items-center mb-6">
+      <div className="bg-white shadow-xl rounded-2xl p-6 w-full max-w-lg">
+        <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold text-gray-800">Nyagrik Registration</h1>
           <button
             onClick={() => router.push('/')}
@@ -81,10 +81,10 @@ const RegisterPage = () => {
 
         {!role && (
           <>
-            <p className="text-gray-600 mb-6 text-sm">
+            <p className="text-gray-600 mb-4 text-sm">
               Please select your role to continue registration.
             </p>
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 gap-3">
               <button
                 onClick={() => setRole('client')}
                 className="flex items-center justify-between px-5 py-3 rounded-lg border hover:shadow-md transition bg-gray-50 hover:bg-indigo-50 border-gray-300 text-gray-700"
@@ -112,11 +112,11 @@ const RegisterPage = () => {
 
         {role && (
           <>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 mt-2 capitalize text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-3 mt-2 capitalize text-center">
               Register as {role === 'intern' ? 'Law Student / Intern' : role}
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <input
                 name="fullName"
                 type="text"
