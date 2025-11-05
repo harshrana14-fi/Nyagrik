@@ -1,13 +1,14 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaUser, FaUserTie, FaGraduationCap, FaArrowLeft, FaHome } from 'react-icons/fa';
+import { FaUser, FaUserTie, FaGraduationCap, FaArrowLeft, FaHome, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const LoginPage = () => {
   const [role, setRole] = useState<'client' | 'lawyer' | 'intern' | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); // ⛔ prevents page refresh
@@ -90,14 +91,24 @@ const LoginPage = () => {
                 className="input-field"
                 required
               />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="input-field"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="input-field pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  onClick={() => setShowPassword((s) => !s)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
               <button type="submit" className="btn-submit">Login</button>
               <button
                 type="button"

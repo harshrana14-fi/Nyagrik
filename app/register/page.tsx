@@ -7,6 +7,8 @@ import {
   FaGraduationCap,
   FaArrowLeft,
   FaHome,
+  FaEye,
+  FaEyeSlash,
 } from 'react-icons/fa';
 
 type Role = 'client' | 'lawyer' | 'intern';
@@ -14,12 +16,14 @@ type Role = 'client' | 'lawyer' | 'intern';
 const RegisterPage = () => {
   const [role, setRole] = useState<Role | null>(null);
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   type RegisterData = {
     role: Role | null;
     fullName: string;
     email: string;
     password: string;
+    phone?: string;
     barReg?: string;
     specialization?: string;
     university?: string;
@@ -36,6 +40,9 @@ const RegisterPage = () => {
       email: String(formData.get('email') || ''),
       password: String(formData.get('password') || ''),
     };
+
+    const phoneVal = String(formData.get('phone') || '').trim();
+    if (phoneVal) data.phone = phoneVal;
 
      if (role === 'lawyer') {
       data.barReg = String(formData.get('barReg') || '');
@@ -132,12 +139,28 @@ const RegisterPage = () => {
                 required
               />
               <input
-                name="password"
-                type="password"
-                placeholder="Password"
+                name="phone"
+                type="tel"
+                placeholder="Phone Number (WhatsApp preferred)"
                 className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                required
               />
+              <div className="relative">
+                <input
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  className="w-full px-4 py-3 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  required
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  onClick={() => setShowPassword((s) => !s)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
 
               {role === 'lawyer' && (
                 <>

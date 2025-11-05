@@ -14,8 +14,9 @@ export async function GET(req) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const client = await clientPromise;
-    const db = client.db('nyay');
-    const collection = db.collection(decoded.role === 'lawyer' ? 'lawyers' : 'users');
+    // Use the same database and collection as login/register APIs
+    const db = client.db('Nyagrik');
+    const collection = db.collection('users');
     const user = await collection.findOne({ _id: new ObjectId(decoded.userId) });
 
     if (!user) {
