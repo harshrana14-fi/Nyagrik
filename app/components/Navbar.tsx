@@ -59,7 +59,7 @@ const Navbar = () => {
           setIsLoggedIn(false);
           setUserRole(null);
         }
-      } catch (err) {
+      } catch {
         setIsLoggedIn(false);
         setUserRole(null);
       }
