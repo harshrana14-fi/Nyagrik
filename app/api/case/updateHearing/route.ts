@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     }
 
     const client = await clientPromise;
-    const db = client.db("nyay");
+    const db = client.db();
     const collection = db.collection("cases");
 
     // Update case with hearing details

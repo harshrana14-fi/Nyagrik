@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 
 export async function POST(req: Request) {
   try {
-    const { fullName, email, password, role } = await req.json();
+    const { fullName, email, password, role, phone } = await req.json();
 
     console.log('[REGISTER] Received:', { fullName, email, role });
 
@@ -38,6 +38,7 @@ export async function POST(req: Request) {
       email,
       password: hashedPassword,
       role,
+      phone: phone || '',
       createdAt: new Date(),
     });
 

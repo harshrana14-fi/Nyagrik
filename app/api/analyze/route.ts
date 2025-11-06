@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
 
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContent(
-      `You are a legal expert. Please analyze the following legal case description:\n\n${description}`
+      `You are a legal expert. Analyze the following case and produce a concise, professional Markdown report.\n\nREQUIREMENTS:\n- Use clear section headings with H2 (##).\n- Use bullet lists where appropriate.\n- Keep paragraphs short (2-4 lines).\n- Include: Summary, Key Facts, Legal Issues, Analysis, Applicable Law, Risks, Recommendations, Next Steps.\n- End with a short Conclusion.\n- Avoid overly long sentences.\n\nCASE DESCRIPTION:\n${description}`
     );
     const analysis = await result.response.text();
 

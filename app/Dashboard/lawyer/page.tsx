@@ -1,19 +1,22 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import {Scale,FileText,Users,Calendar,MessageSquare,TrendingUp,Clock,CheckCircle,AlertCircle,User,Mail,Phone,Eye,Gavel,Download,Filter,LogOut,Home,} from "lucide-react";
+import {Scale,FileText,Users,Calendar,MessageSquare,TrendingUp,Clock,CheckCircle,AlertCircle,User,Mail,Phone,Eye,Gavel,Filter,LogOut,Home,Trash2} from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
 type CaseItem = {
-  documents: string;
-  downloadLink: string | undefined;
+  documents?: string[] | string;
+  downloadLink?: string | undefined;
   _id: string;
   fileName: string;
   description: string;
   aiSolution: string;
   date: string;
+  createdAt?: string;
   status: "pending" | "in-progress" | "completed" | "urgent";
   clientName: string;
   priority: "high" | "medium" | "low";
@@ -133,7 +136,8 @@ const LawyerDashboard = () => {
   const [openCases, setOpenCases] = useState<CaseItem[]>([]);
   const [selectedCase, setSelectedCase] = useState<CaseItem | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState<"view" | "ai" | null>(null);
+  const [modalType, setModalType] = useState<"view" | "ai" | "court" | null>(null);
+  const [clientsById, setClientsById] = useState<Record<string, { _id: string; name: string; email?: string; phone?: string; profileImage?: string }>>({});
 
   useEffect(() => {
     const checkAuthAndFetchUser = async () => {
@@ -173,24 +177,117 @@ const LawyerDashboard = () => {
 
         const assignedData = await assignedRes.json();
         if (assignedRes.ok) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const normalizedCases = assignedData.cases.map((caseItem: any) => ({
             ...caseItem,
             aiSolution: caseItem.aiSolution || caseItem.analysis || "",
           }));
-          setAcceptedCases(normalizedCases);
+
+          // Enrich accepted cases with client names
+          const getIdString = (val: any): string => {
+            if (!val) return "";
+            if (typeof val === "string") return val;
+            if (typeof val === "object") {
+              const anyVal: any = val;
+              if (anyVal.$oid) return anyVal.$oid as string;
+              if (typeof anyVal.toString === "function") return anyVal.toString();
+            }
+            return String(val);
+          };
+
+          const clientIds = Array.from(
+            new Set(
+              normalizedCases
+                .map((c: any) => getIdString(c.clientId))
+                .filter((id: any) => !!id)
+            )
+          );
+
+          let idToName: Record<string, string> = {};
+          let idToClient: Record<string, any> = {};
+          if (clientIds.length > 0) {
+            try {
+              const usersRes = await fetch("/api/user/list", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ids: clientIds }),
+              });
+              const users = await usersRes.json();
+              if (usersRes.ok && Array.isArray(users)) {
+                idToName = users.reduce((acc: Record<string, string>, u: any) => { acc[u._id] = u.name || "Client"; return acc; }, {});
+                idToClient = users.reduce((acc: Record<string, any>, u: any) => { acc[u._id] = u; return acc; }, {});
+              }
+            } catch {
+              // ignore name fetch failures, fallback below
+            }
+          }
+
+          const enrichedAccepted = normalizedCases.map((c: any) => ({
+            ...c,
+            clientName: idToName[getIdString(c.clientId)] || c.clientName || "Client",
+          }));
+
+          setAcceptedCases(enrichedAccepted);
+          setClientsById((prev) => ({ ...prev, ...idToClient }));
         }
 
         // Fetch open cases
         const openRes = await fetch("/api/case/open");
         const openData = await openRes.json();
         if (openRes.ok && Array.isArray(openData.cases)) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const normalizedOpenCases = openData.cases.map((caseItem: any) => ({
             ...caseItem,
             aiSolution: caseItem.aiSolution || caseItem.analysis || "",
           }));
-          setOpenCases(normalizedOpenCases);
+
+          // Resolve client names for display in modal
+          const getIdString = (val: any): string => {
+            if (!val) return "";
+            if (typeof val === "string") return val;
+            if (typeof val === "object") {
+              // handle {"$oid":"..."} shape
+              const anyVal: any = val;
+              if (anyVal.$oid) return anyVal.$oid as string;
+              if (typeof anyVal.toString === "function") return anyVal.toString();
+            }
+            return String(val);
+          };
+
+          const clientIds = Array.from(
+            new Set(
+              normalizedOpenCases
+                .map((c: any) => getIdString(c.clientId))
+                .filter((id: any) => !!id)
+            )
+          );
+          let idToName: Record<string, string> = {};
+          let idToClient: Record<string, any> = {};
+          if (clientIds.length > 0) {
+            try {
+              const usersRes = await fetch("/api/user/list", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ids: clientIds }),
+              });
+              const users = await usersRes.json();
+              if (usersRes.ok && Array.isArray(users)) {
+                idToName = users.reduce((acc: Record<string, string>, u: any) => {
+                  acc[u._id] = u.name || "Client";
+                  return acc;
+                }, {});
+                idToClient = users.reduce((acc: Record<string, any>, u: any) => { acc[u._id] = u; return acc; }, {});
+              }
+            } catch {
+              // ignore name fetch failures, fallback below
+            }
+          }
+
+          const enriched = normalizedOpenCases.map((c: any) => ({
+            ...c,
+            clientName: idToName[getIdString(c.clientId)] || "Client",
+          }));
+
+          setOpenCases(enriched);
+          setClientsById((prev) => ({ ...prev, ...idToClient }));
         } else {
           setOpenCases([]);
         }
@@ -239,6 +336,27 @@ const LawyerDashboard = () => {
     }
   };
 
+  const unassignCase = async (caseId: string) => {
+    if (!confirm("Remove this case from your accepted list? It will return to Open Cases.")) return;
+    try {
+      const res = await fetch("/api/case/unassign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ caseId, lawyerId: user?._id }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || "Failed to unassign");
+      const removed = acceptedCases.find((c) => c._id === caseId);
+      setAcceptedCases((prev) => prev.filter((c) => c._id !== caseId));
+      if (removed) {
+        setOpenCases((prev) => [{ ...removed, status: "open" as any }, ...prev]);
+      }
+      alert("Case unassigned successfully");
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : "Unknown error");
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "pending":
@@ -270,6 +388,47 @@ const LawyerDashboard = () => {
   const filteredCases = acceptedCases.filter(
     (caseItem) => filterStatus === "all" || caseItem.status === filterStatus
   );
+
+  const convertMarkdownLiteToHtml = (text: string) => {
+    if (!text) return "";
+    const lines = text.split(/\r?\n/);
+    const html: string[] = [];
+    let inList = false;
+    const flushList = () => {
+      if (inList) {
+        html.push("</ul>");
+        inList = false;
+      }
+    };
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        flushList();
+        html.push("<br/>");
+        continue;
+      }
+      const hMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
+      if (hMatch) {
+        flushList();
+        const level = hMatch[1].length;
+        const content = hMatch[2];
+        html.push(`<h${level} class=\"mt-4 mb-2 font-semibold text-gray-800\">${content}</h${level}>`);
+        continue;
+      }
+      if (/^[-*]\s+/.test(trimmed)) {
+        if (!inList) {
+          inList = true;
+          html.push('<ul class="list-disc list-inside space-y-1">');
+        }
+        html.push(`<li>${trimmed.replace(/^[-*]\s+/, "")}</li>`);
+        continue;
+      }
+      const bolded = trimmed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      html.push(`<p class=\"text-gray-800 leading-relaxed\">${bolded}</p>`);
+    }
+    flushList();
+    return html.join("\n");
+  };
 
   const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
     { id: "profile", label: "Profile", icon: <User size={18} /> },
@@ -639,13 +798,20 @@ const LawyerDashboard = () => {
                           {caseItem.description?.slice(0, 40)}...
                         </td>
                         <td className="p-2">
-                          <a
-                            href={`/uploads/${caseItem.documents?.[0]}`}
-                            download
-                            className="text-blue-600 underline"
-                          >
-                            Download
-                          </a>
+                          {caseItem.documents ? (
+                            <a
+                              href={Array.isArray(caseItem.documents)
+                                ? `/uploads/${caseItem.documents[0]}`
+                                : `/uploads/${caseItem.documents}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-green-600 underline"
+                            >
+                              View
+                            </a>
+                          ) : (
+                            <span className="text-gray-400">No file</span>
+                          )}
                         </td>
                         <td className="p-2 flex flex-col gap-1">
                           <button
@@ -748,7 +914,9 @@ const LawyerDashboard = () => {
                     {filteredCases.map((caseItem) => (
                       <tr key={caseItem._id} className="hover:bg-gray-50">
                         <td className="px-4 py-3 font-medium text-indigo-600">
-                          #{caseItem._id}
+                          <Link href={`/Dashboard/lawyer/case/${caseItem._id}`} className="underline">
+                            #{caseItem._id}
+                          </Link>
                         </td>
                         <td className="px-4 py-3">{caseItem.clientName}</td>
                         <td className="px-4 py-3">
@@ -793,13 +961,36 @@ const LawyerDashboard = () => {
                             >
                               <Eye size={16} />
                             </button>
-                            <a
-                              href={caseItem.downloadLink}
-                              className="text-gray-600 hover:text-gray-800"
-                              download
+                            {caseItem.documents && (
+                              <a
+                                href={Array.isArray(caseItem.documents)
+                                  ? `/uploads/${caseItem.documents[0]}`
+                                  : `/uploads/${caseItem.documents}`}
+                                className="text-green-600 hover:text-green-800"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="View document"
+                              >
+                                <Eye size={16} />
+                              </a>
+                            )}
+                            <button
+                              className="text-green-600 hover:text-green-800 text-xs underline"
+                              onClick={() => {
+                                setSelectedCase(caseItem);
+                                setModalType("court");
+                                setShowModal(true);
+                              }}
                             >
-                              <Download size={16} />
-                            </a>
+                              Update Court Details
+                            </button>
+                            <button
+                              className="text-red-600 hover:text-red-800"
+                              title="Unassign Case"
+                              onClick={() => unassignCase(caseItem._id)}
+                            >
+                              <Trash2 size={16} />
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -819,31 +1010,39 @@ const LawyerDashboard = () => {
             >
               <h2 className="text-xl font-semibold mb-6">Client Directory</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from(
-                  new Set(acceptedCases.map((c) => c.clientName))
-                ).map((clientName, index) => (
-                  <div
-                    key={index}
-                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <User className="text-indigo-600" size={20} />
-                      </div>
-                      <div>
-                        <h3 className="font-medium">{clientName}</h3>
-                        <p className="text-sm text-gray-600">
-                          {
-                            acceptedCases.filter(
-                              (c) => c.clientName === clientName
-                            ).length
-                          }{" "}
-                          case(s)
-                        </p>
+                {Array.from(new Set(acceptedCases.map((c) => (c as any).clientId))).map((cidAny, index) => {
+                  const cid = typeof cidAny === "string" ? cidAny : (cidAny as any)?.$oid || String(cidAny);
+                  const client = clientsById[cid];
+                  const name = client?.name || acceptedCases.find((c) => (c as any).clientId === cidAny)?.clientName || "Client";
+                  const wa = client?.phone ? `https://wa.me/${String(client.phone).replace(/\D/g, "")}` : null;
+                  return (
+                    <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-center space-x-3">
+                        {client?.profileImage ? (
+                          <img src={client.profileImage} alt="Client" className="w-12 h-12 rounded-full object-cover" />
+                        ) : (
+                          <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                            <User className="text-indigo-600" size={20} />
+                          </div>
+                        )}
+                        <div>
+                          <h3 className="font-medium">{name}</h3>
+                          <p className="text-sm text-gray-600">{client?.email || ""}</p>
+                          <div className="flex items-center gap-3 mt-1">
+                            {wa ? (
+                              <a href={wa} target="_blank" rel="noopener noreferrer" className="text-green-600 underline text-sm">WhatsApp</a>
+                            ) : (
+                              <span className="text-gray-400 text-sm">WhatsApp N/A</span>
+                            )}
+                            {client?.email && (
+                              <a href={`mailto:${client.email}`} className="text-indigo-600 underline text-sm">Email</a>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </motion.div>
           )}
@@ -942,14 +1141,47 @@ const LawyerDashboard = () => {
               className="p-6"
             >
               <h2 className="text-xl font-semibold mb-6">Client Messages</h2>
-
-              coming soon
-              <div className="text-center py-12">
-                <MessageSquare className="mx-auto text-gray-400 mb-4" size={48} />
-                <p className="text-gray-600">
-                  Messaging feature is under development
-                </p>
-              </div>
+              {acceptedCases.length === 0 ? (
+                <p className="text-gray-600">No assigned cases yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {acceptedCases.map((c) => (
+                    <div key={c._id} className="border rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <p className="font-semibold">Case #{c._id}</p>
+                          <p className="text-sm text-gray-600">Client: {c.clientName || "Client"}</p>
+                        </div>
+                        <button
+                          className="text-indigo-600 underline text-sm"
+                          onClick={() => {
+                            setSelectedCase(c);
+                            setModalType("view");
+                            setShowModal(true);
+                          }}
+                        >
+                          View Case
+                        </button>
+                      </div>
+                      {Boolean((c as any)?.notes?.length) ? (
+                        <ul className="space-y-2">
+                          {((c as any).notes as Array<any>).slice().reverse().map((n, i) => (
+                            <li key={i} className="bg-gray-50 border rounded p-2 text-sm">
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium">{n.by || "client"}</span>
+                                <span className="text-xs text-gray-500">{n.at ? new Date(n.at).toLocaleString() : ""}</span>
+                              </div>
+                              <p className="mt-1 whitespace-pre-wrap">{n.text}</p>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-gray-600 text-sm">No messages yet.</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </motion.div>
           )}
         </div>
@@ -1053,7 +1285,7 @@ const LawyerDashboard = () => {
                   <strong>ID:</strong> #{selectedCase._id}
                 </p>
                 <p>
-                  <strong>Client:</strong> {selectedCase.clientName}
+                  <strong>Client:</strong> {selectedCase.clientName || "Client"}
                 </p>
                 <p>
                   <strong>Type:</strong> {selectedCase.caseType}
@@ -1068,15 +1300,41 @@ const LawyerDashboard = () => {
                   <strong>Priority:</strong> {selectedCase.priority}
                 </p>
                 <p>
-                  <strong>Date:</strong> {selectedCase.date}
+                  <strong>Date:</strong> {selectedCase.createdAt ? new Date(selectedCase.createdAt as any).toLocaleString() : (selectedCase.date || "")}
                 </p>
+                {/* Client Messages / Notes */}
+                {(selectedCase as any)?.notes?.length ? (
+                  <div className="mt-4">
+                    <h3 className="font-semibold mb-2">Client Messages</h3>
+                    <ul className="space-y-2">
+                      {((selectedCase as any).notes as Array<any>).map((n, i) => (
+                        <li key={i} className="border rounded p-2 text-sm bg-gray-50">
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium">{n.by || "client"}</span>
+                            <span className="text-xs text-gray-500">{n.at ? new Date(n.at).toLocaleString() : ""}</span>
+                          </div>
+                          <p className="mt-1 whitespace-pre-wrap">{n.text}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
               </>
             )}
             {modalType === "ai" && (
               <>
                 <h2 className="text-lg font-semibold mb-4">AI Summary</h2>
-                <p className="whitespace-pre-wrap">{selectedCase.aiSolution}</p>
+                <div
+                  className="text-sm"
+                  dangerouslySetInnerHTML={{ __html: convertMarkdownLiteToHtml(selectedCase.aiSolution || "") }}
+                />
               </>
+            )}
+            {modalType === "court" && (
+              <CourtDetailsForm
+                caseId={selectedCase._id}
+                onClose={() => setShowModal(false)}
+              />
             )}
           </div>
         </div>
@@ -1086,3 +1344,143 @@ const LawyerDashboard = () => {
 };
 
 export default LawyerDashboard;
+
+const CourtDetailsForm = ({
+  caseId,
+  onClose,
+}: {
+  caseId: string;
+  onClose: () => void;
+}) => {
+  const [lastHearingDate, setLastHearingDate] = React.useState<string>("");
+  const [lastHearingSummary, setLastHearingSummary] = React.useState<string>("");
+  const [nextHearingDate, setNextHearingDate] = React.useState<string>("");
+  const [orders, setOrders] = React.useState<string[]>([]);
+  const [newOrder, setNewOrder] = React.useState<string>("");
+  const [saving, setSaving] = React.useState<boolean>(false);
+
+  const addOrder = () => {
+    if (!newOrder.trim()) return;
+    setOrders((prev) => [...prev, newOrder.trim()]);
+    setNewOrder("");
+  };
+
+  const removeOrder = (idx: number) => {
+    setOrders((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const save = async () => {
+    try {
+      setSaving(true);
+      const res = await fetch("/api/case/updateHearing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          caseId,
+          hearingDetails: {
+            lastHearingDate: lastHearingDate || undefined,
+            lastHearingSummary: lastHearingSummary || undefined,
+            nextHearingDate: nextHearingDate || undefined,
+            orders,
+          },
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save");
+      alert("Court details updated");
+      onClose();
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : "Unknown error");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <>
+      <h2 className="text-lg font-semibold mb-4">Update Court Details</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm text-gray-600 mb-1">Last Hearing Date</label>
+          <input
+            type="date"
+            className="w-full border rounded px-3 py-2"
+            value={lastHearingDate}
+            onChange={(e) => setLastHearingDate(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="block text-sm text-gray-600 mb-1">Next Hearing Date</label>
+          <input
+            type="date"
+            className="w-full border rounded px-3 py-2"
+            value={nextHearingDate}
+            onChange={(e) => setNextHearingDate(e.target.value)}
+          />
+        </div>
+        <div className="md:col-span-2">
+          <label className="block text-sm text-gray-600 mb-1">Last Hearing Summary</label>
+          <textarea
+            className="w-full border rounded px-3 py-2"
+            rows={4}
+            value={lastHearingSummary}
+            onChange={(e) => setLastHearingSummary(e.target.value)}
+            placeholder="Enter a concise summary of the last hearing"
+          />
+        </div>
+        <div className="md:col-span-2">
+          <label className="block text-sm text-gray-600 mb-1">Orders</label>
+          <div className="flex gap-2 mb-2">
+            <input
+              className="flex-1 border rounded px-3 py-2"
+              value={newOrder}
+              onChange={(e) => setNewOrder(e.target.value)}
+              placeholder="Add an order"
+            />
+            <button
+              type="button"
+              onClick={addOrder}
+              className="px-3 py-2 bg-gray-100 border rounded hover:bg-gray-200"
+            >
+              Add
+            </button>
+          </div>
+          {orders.length > 0 && (
+            <ul className="list-disc list-inside space-y-1">
+              {orders.map((o, idx) => (
+                <li key={idx} className="flex items-center justify-between">
+                  <span>{o}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeOrder(idx)}
+                    className="text-red-600 text-xs underline"
+                  >
+                    remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+      <div className="mt-4 flex justify-end gap-2">
+        <button
+          type="button"
+          className="px-4 py-2 border rounded"
+          onClick={onClose}
+          disabled={saving}
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          onClick={save}
+          disabled={saving}
+        >
+          {saving ? "Saving..." : "Save"}
+        </button>
+      </div>
+    </>
+  );
+};
